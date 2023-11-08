@@ -10,19 +10,7 @@
     "resolveJsonModule": true,
     "strict": true,
     "baseUrl": ".",
-    "allowJs": true,
-    "paths": {
-      "@/*": ["./src/*"],
-      "@env": ["./src/clientEnv.js"]
-    }
+    "allowJs": true
   },
-  "include": [
-    "**/*.ts",
-    "**/*.tsx",
-    ".expo/types/**/*.ts",
-    "expo-env.d.ts",
-    ".eslintrc.js",
-    "commitlint.config.js",
-    "liststagedrc.json"
-  ]
+  "include": ["**/*.ts", "**/*.tsx", ".eslintrc.js", "commitlint.config.js", "liststagedrc.json"]
 }
