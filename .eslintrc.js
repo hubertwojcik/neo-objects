@@ -1,6 +1,5 @@
 module.exports = {
   extends: ['plugin:prettier/recommended'],
-
   rules: {
     'prettier/prettier': [
       'error',
@@ -13,6 +12,7 @@ module.exports = {
   overrides: [
     {
       files: ['**/*.ts', '**/*.tsx'],
+
       plugins: ['react', 'react-hooks', '@typescript-eslint', 'prettier'],
       extends: [
         'eslint:recommended',
