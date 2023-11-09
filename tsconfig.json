@@ -10,7 +10,11 @@
     "resolveJsonModule": true,
     "strict": true,
     "baseUrl": ".",
-    "allowJs": true
+    "allowJs": true,
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   },
-  "include": ["**/*.ts", "**/*.tsx", ".eslintrc.js", "commitlint.config.js", "liststagedrc.json"]
+  "include": ["**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules", "babel.config.js"]
 }
