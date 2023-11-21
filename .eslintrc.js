@@ -1,5 +1,17 @@
 module.exports = {
+  // Configuration for JavaScript files
   extends: ['plugin:prettier/recommended'],
+  env: {
+    es2021: true,
+    node: true,
+  },
+  parserOptions: {
+    ecmaFeatures: {
+      jsx: true,
+    },
+    ecmaVersion: 12,
+    sourceType: 'module',
+  },
   rules: {
     'prettier/prettier': [
       'error',
@@ -10,29 +22,26 @@ module.exports = {
     ],
   },
   overrides: [
+    // Configuration for TypeScript files
     {
       files: ['**/*.ts', '**/*.tsx'],
-
-      plugins: ['react', 'react-hooks', '@typescript-eslint', 'prettier'],
       extends: [
         'eslint:recommended',
         'plugin:react/recommended',
-        'plugin:react-hooks/recommended',
-        'plugin:@typescript-eslint/eslint-recommended',
         'plugin:@typescript-eslint/recommended',
-        'plugin:@typescript-eslint/recommended-requiring-type-checking',
+        'prettier',
       ],
-      parserOptions: {
-        project: './tsconfig.json',
+      parser: '@typescript-eslint/parser',
+      plugins: ['react', '@typescript-eslint'],
+      settings: {
+        react: {
+          version: 'detect',
+        },
       },
       rules: {
-        indent: ['error', 2, { SwitchCase: 1 }],
-        quotes: ['error', 'single', { avoidEscape: true }],
-        'no-empty-function': 'off',
-        '@typescript-eslint/no-empty-function': 'off',
-        'react/display-name': 'off',
-        'react/prop-types': 'off',
-        'prettier/prettier': 'error',
+        'max-params': ['error', 3], // Limit the number of parameters in a function to use object instead
+        '@typescript-eslint/consistent-type-imports': 'error', // Ensure `import type` is used when it's necessary
+        '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
       },
     },
   ],

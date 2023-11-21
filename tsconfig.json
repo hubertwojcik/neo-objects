@@ -15,6 +15,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["**/*.ts", "**/*.tsx"],
+  "include": ["**/*.ts", "**/*.tsx", "src/screens/welcome/index.tss"],
   "exclude": ["node_modules", "babel.config.js"]
 }

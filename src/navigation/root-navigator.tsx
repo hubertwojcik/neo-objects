@@ -1,20 +1,20 @@
-import { useAuthStore } from '@/core/store';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { AuthNavigator } from './auth-navigator';
-import { HomeNavigator } from './home-navigator';
+
+import { HomeNavigator } from './tab-navigator';
 import { NavigationContainer } from './navigation-container';
 import React from 'react';
+import { Welcome } from '@/screens';
 
 const Stack = createNativeStackNavigator();
 
 export const RootNavigator = () => {
-  const { authenticationStatus } = useAuthStore();
+  const isOnboarding = true;
 
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        {authenticationStatus === 'signOut' ? (
-          <Stack.Screen name="Auth" component={AuthNavigator} />
+        {isOnboarding ? (
+          <Stack.Screen name="welcome" component={Welcome} />
         ) : (
           <Stack.Screen name="App" component={HomeNavigator} />
         )}
