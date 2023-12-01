@@ -4,16 +4,21 @@ import { HomeNavigator } from './tab-navigator';
 import { NavigationContainer } from './navigation-container';
 import React from 'react';
 import { Welcome } from '@/screens';
+import { useAppStore } from '@/core/store';
 
 const Stack = createNativeStackNavigator();
 
 export const RootNavigator = () => {
-  const isOnboarding = true;
+  const { isWelcomed } = useAppStore();
 
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        {isOnboarding ? (
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false,
+        }}
+      >
+        {!isWelcomed ? (
           <Stack.Screen name="welcome" component={Welcome} />
         ) : (
           <Stack.Screen name="App" component={HomeNavigator} />

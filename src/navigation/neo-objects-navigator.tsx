@@ -11,7 +11,11 @@ const Stack = createNativeStackNavigator<NeoObjectsStackParamList>();
 
 export const NeoObjectsNavigator = () => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
       <Stack.Screen name="NeoObjects" component={NeoObjects} />
       <Stack.Screen name="NeoObjectDetails" component={NeoObjectDetails} />
     </Stack.Navigator>
