@@ -1,28 +1,18 @@
 import type { NearEarthObject } from '@/api/neo-objects';
-import {
-  colors,
-  getElevation,
-  horizontalScale,
-  verticalScale,
-} from '@/shared/utils';
+import { colors, verticalScale } from '@/shared/utils';
 import { AntDesign } from '@expo/vector-icons';
 import { Skeleton } from 'moti/skeleton';
-import React, { useReducer } from 'react';
+import React from 'react';
 import {
   ActivityIndicator,
   Button,
-  StyleSheet,
   Text,
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import Animated, {
-  interpolate,
-  useAnimatedStyle,
-  useDerivedValue,
-  useSharedValue,
-  withTiming,
-} from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
+import { styles } from './styles';
+import { useOpenDetailAnimation } from './use-open-detail-animation';
 
 type NeoObjectListItemProps = {
   item: NearEarthObject | null;
@@ -44,57 +34,13 @@ export const NeoObjectListItem = ({
   item,
   onDetailsPress,
 }: NeoObjectListItemProps) => {
-  const [isOpen, setOpen] = useReducer((val) => !val, false);
-
-  const animatedHeightValue = useSharedValue(0);
-  const bodyHeight = useSharedValue(0);
-
-  const toggleOpen = () => {
-    setOpen();
-    toggleAnimationValue(!isOpen);
-  };
-
-  const toggleAnimationValue = (open: boolean) => {
-    if (open) {
-      animatedHeightValue.value = withTiming(1, {
-        duration: 300,
-      });
-    } else {
-      animatedHeightValue.value = withTiming(0, {
-        duration: 300,
-      });
-    }
-  };
-
-  const progress = useDerivedValue(() =>
-    isOpen ? withTiming(1) : withTiming(0),
-  );
-
-  const animatedHeight = useAnimatedStyle(() => {
-    const height = interpolate(
-      animatedHeightValue.value,
-      [0, 1],
-      [0, bodyHeight.value * progress.value + 1],
-    );
-
-    const marginTop = interpolate(animatedHeightValue.value, [0, 1], [0, 10]);
-
-    return {
-      height: height,
-      marginTop: marginTop,
-    };
-  });
-
-  const animatedIconStyles = useAnimatedStyle(() => {
-    return {
-      transform: [{ rotate: `${progress.value * 180}deg` }],
-    };
-  });
+  const { animatedHeight, toggleOpen, animatedIconStyles, bodyHeight } =
+    useOpenDetailAnimation();
 
   return (
     <View style={styles.listItemContainer}>
       <Skeleton.Group show={item == null}>
-        <TouchableWithoutFeedback onPress={toggleOpen}>
+        <TouchableWithoutFeedback disabled={!item} onPress={toggleOpen}>
           <View style={styles.listItemContent}>
             <View style={styles.listItemSkeletonWrapper}>
               <Skeleton
@@ -161,49 +107,3 @@ export const NeoObjectListItem = ({
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  listItemContainer: {
-    backgroundColor: colors.white,
-    borderRadius: horizontalScale(10),
-    ...getElevation({ elevation: 5 }),
-  },
-  listItemContent: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    flex: 1,
-    paddingHorizontal: horizontalScale(10),
-    paddingVertical: verticalScale(4),
-  },
-  listItemSkeletonWrapper: { paddingVertical: verticalScale(10) },
-  listItemTitle: {
-    color: colors.dark,
-    fontSize: 16,
-  },
-  hazardousIconWrapper: { marginRight: horizontalScale(10) },
-  expandedWrapper: {
-    overflow: 'hidden',
-    ...getElevation({ elevation: 10 }),
-  },
-  expandedContainer: {
-    position: 'absolute',
-    width: '100%',
-    paddingHorizontal: horizontalScale(10),
-  },
-  expandedContent: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  expandedItemWrapper: { flex: 1 },
-  expandedDetailContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  collapsableText: {
-    fontSize: 12,
-    color: colors.dark,
-  },
-});
