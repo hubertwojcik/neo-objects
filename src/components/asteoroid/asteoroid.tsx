@@ -55,7 +55,6 @@ export const Asteroid = () => {
         [
           {
             flex: 1,
-            backgroundColor: 'red',
           },
           animatedAsteoroidContainerStyles,
         ],
