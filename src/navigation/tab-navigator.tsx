@@ -7,7 +7,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import type { RouteProp } from '@react-navigation/native';
 import { NeoObjectsNavigator } from './neo-objects-navigator';
 import React from 'react';
-import { getElevation } from '@/shared/utils';
+import { colors, getElevation } from '@/shared/utils';
 // import { AntDesign } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import type { SvgProps } from 'react-native-svg';
@@ -87,7 +87,7 @@ export const HomeNavigator = () => {
             right: 16,
             left: 16,
             height: 60,
-            backgroundColor: '#E1D4C8',
+            backgroundColor: colors.dark,
             borderRadius: 10,
             ...getElevation({ elevation: 5 }),
           },

@@ -1,10 +1,13 @@
-import { NeoObjectDetails, NeoObjects } from '@/screens';
+import { Filters, NeoObjectDetails, NeoObjects } from '@/screens';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 
 export type NeoObjectsStackParamList = {
   NeoObjects: undefined;
-  NeoObjectDetails: undefined;
+  NeoObjectDetails: {
+    id: string;
+  };
+  Filters: undefined;
 };
 
 const Stack = createNativeStackNavigator<NeoObjectsStackParamList>();
@@ -17,7 +20,21 @@ export const NeoObjectsNavigator = () => {
       }}
     >
       <Stack.Screen name="NeoObjects" component={NeoObjects} />
-      <Stack.Screen name="NeoObjectDetails" component={NeoObjectDetails} />
+      <Stack.Group
+        screenOptions={{
+          presentation: 'fullScreenModal',
+          headerShown: true,
+        }}
+      >
+        <Stack.Screen name="NeoObjectDetails" component={NeoObjectDetails} />
+      </Stack.Group>
+      <Stack.Group
+        screenOptions={{
+          presentation: 'modal',
+        }}
+      >
+        <Stack.Screen name="Filters" component={Filters} />
+      </Stack.Group>
     </Stack.Navigator>
   );
 };

@@ -16,10 +16,15 @@
     "@react-navigation/bottom-tabs": "^6.5.11",
     "@react-navigation/native": "^6.1.6",
     "@react-navigation/native-stack": "^6.9.12",
+    "@shopify/react-native-skia": "0.1.196",
     "@tanstack/react-query": "^5.8.4",
     "axios": "^1.6.2",
+    "dayjs": "^1.11.10",
     "expo": "~49.0.16",
+    "expo-linear-gradient": "^12.5.0",
     "expo-status-bar": "~1.6.0",
+    "lottie-react-native": "5.1.6",
+    "moti": "^0.27.2",
     "react": "18.2.0",
     "react-hook-form": "^7.48.2",
     "react-native": "0.72.5",
@@ -29,9 +34,7 @@
     "react-native-screens": "~3.22.0",
     "react-native-svg": "13.9.0",
     "zod": "^3.22.4",
-    "zustand": "^4.4.6",
-    "lottie-react-native": "5.1.6",
-    "@shopify/react-native-skia": "0.1.196"
+    "zustand": "^4.4.6"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
