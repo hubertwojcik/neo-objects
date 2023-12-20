@@ -4,7 +4,7 @@ import type { AxiosError } from 'axios';
 import { client } from '../client';
 
 import { neoObjectsFactory } from './neo-objects-factory';
-import type { NeoObjectReponseData } from './types';
+import type { NeoObjectReponseData } from '@/shared/types';
 
 const apiKey = '9TBtGd0cKSPsorZgQkfI5QI2HExTG8qWIX1NuzhC';
 
