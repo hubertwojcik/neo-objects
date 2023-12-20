@@ -97,9 +97,13 @@ export const mapNEOFilters: MapValuesFunction = (
 ) => {
   return Object.keys(filterCriteria).reduce(
     (transformedFilters, filterKey) => {
-      transformedFilters[filterKey] = applyFilterTransformation(
+      const transformedValue = applyFilterTransformation(
         filterCriteria[filterKey],
       );
+
+      if (transformedValue !== undefined) {
+        transformedFilters[filterKey] = transformedValue;
+      }
       return transformedFilters;
     },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -194,7 +198,9 @@ const isFilterMatch = (
 export const getFilterValue = <K extends NEOFilterKey>(
   name: K,
   neoFilters: NEOFilterSettings,
-) => neoFilters[name]?.value as NEOFilterCriteriaMap[K] | undefined;
+) => {
+  return neoFilters[name]?.value as NEOFilterCriteriaMap[K] | undefined;
+};
 
 /**
  * Extracts only the active filters from a set of NEO filter settings.
@@ -239,6 +245,6 @@ const isActiveFilter = ([_, val]: NEOFilterPair): boolean => {
   const value = val.value;
   if (isString(value)) return !!value.trim();
   else if (isNumber(value)) return !!value;
-  else if (isBoolean(value)) return value;
+  else if (isBoolean(value)) return true;
   return false;
 };
