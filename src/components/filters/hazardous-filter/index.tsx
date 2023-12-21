@@ -15,9 +15,9 @@ type HazardousFilterProps = {
 };
 
 const HAZARDOUS_OPTIONS = [
-  { id: 0, val: undefined, name: 'all' },
-  { id: 1, val: true, name: 'yes' },
-  { id: 2, val: false, name: 'no' },
+  { id: 0, value: undefined, name: 'all' },
+  { id: 1, value: true, name: 'yes' },
+  { id: 2, value: false, name: 'no' },
 ];
 
 const FILTER_ITEM_HEIGHT = verticalScale(40);
@@ -31,7 +31,7 @@ export const HazardousFilter = ({ setValue, value }: HazardousFilterProps) => {
 
   const indicatorInitialPosition = React.useMemo(
     () => (value === undefined ? 0 : value ? ITEM_SIZE : 2 * ITEM_SIZE),
-    [],
+    [value],
   );
 
   const hazardousPosition = useSharedValue(indicatorInitialPosition);
@@ -73,7 +73,7 @@ export const HazardousFilter = ({ setValue, value }: HazardousFilterProps) => {
         {HAZARDOUS_OPTIONS.map((i, idx) => (
           <Pressable
             key={i.id}
-            onPress={() => onHazardousSelection(ITEM_SIZE * idx, value)}
+            onPress={() => onHazardousSelection(ITEM_SIZE * idx, i.value)}
             style={{
               width: ITEM_SIZE,
             }}
