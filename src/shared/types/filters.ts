@@ -1,4 +1,5 @@
 import type { NearEarthObject } from './neo';
+import type { PickByType } from './utils';
 
 /**
  * Represents a mapping of keys to their respective filter types for Near Earth Objects.
@@ -32,6 +33,30 @@ export type NEOFilterCriteriaMap = {
 export type NEOFilterKey = keyof Pick<
   NearEarthObject,
   keyof NEOFilterCriteriaMap
+>;
+
+/**
+ * Represents the keys from `NearEarthObject` that are filterable with numeric criteria.
+ *
+ * This type is created by extracting keys from `NearEarthObject` based on the criteria defined in `NEOFilterCriteriaMap`.
+ * It includes only those keys whose values are of type `number`.
+ *
+ * @example
+ * ```typescript
+ * type NumericFilterKey = 'absolute_magnitude_h';
+ * ```
+ *
+ * @remarks
+ * This type is used in the context of filtering Near-Earth Objects (NEOs) based on numeric criteria,
+ * as defined in the `NEOFilterCriteriaMap`.
+ *
+ * @see {@link NearEarthObject}
+ * @see {@link NEOFilterCriteriaMap}
+ * @see {@link NEOFilterKey}
+ */
+export type NumericFilterKey = keyof PickByType<
+  Pick<NearEarthObject, NEOFilterKey>,
+  number
 >;
 
 /**

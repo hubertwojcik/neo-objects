@@ -45,3 +45,26 @@ export type MapValuesFunction = <T, U>(
   obj: Record<string, T>,
   fn: (value: T) => U,
 ) => Record<string, U>;
+
+/**
+ * Picks properties from a given type based on their values' type.
+ *
+ * @typeParam T - The input type.
+ * @typeParam U - The type to filter properties by.
+ *
+ * @example
+ * ```typescript
+ * type InputType = {
+ *   name: string;
+ *   age: number;
+ *   isActive: boolean;
+ * };
+ *
+ * type StringType = PickByType<InputType, string>; // { name: string }
+ * type NumberType = PickByType<InputType, number>; // { age: number }
+ * type BooleanType = PickByType<InputType, boolean>; // { isActive: boolean }
+ * ```
+ */
+export type PickByType<T, U> = {
+  [P in keyof T as T[P] extends U ? P : never]: T[P];
+};

@@ -9,6 +9,7 @@ import type {
   NearEarthObject,
   RangeFilter,
   TextFilter,
+  NumericFilterKey,
 } from '../types';
 import type { MapValuesFunction } from '../types/utils';
 
@@ -248,3 +249,73 @@ const isActiveFilter = ([_, val]: NEOFilterPair): boolean => {
   else if (isBoolean(value)) return true;
   return false;
 };
+
+function findMinItem<T>(
+  array: T[],
+  getValueFunction: (item: T) => number,
+): T | null {
+  if (array.length === 0) {
+    // Handle the case of an empty array
+    return null;
+  }
+
+  let minValue = getValueFunction(array[0]);
+  let minItem = array[0];
+
+  for (let i = 1; i < array.length; i++) {
+    const currentValue = getValueFunction(array[i]);
+    if (currentValue < minValue) {
+      minValue = currentValue;
+      minItem = array[i];
+    }
+  }
+
+  return minItem;
+}
+
+function findMaxItem<T>(
+  array: T[],
+  getValueFunction: (item: T) => number,
+): T | null {
+  if (array.length === 0) {
+    // Handle the case of an empty array
+    return null;
+  }
+
+  let maxValue = getValueFunction(array[0]);
+  let maxItem = array[0];
+
+  for (let i = 1; i < array.length; i++) {
+    const currentValue = getValueFunction(array[i]);
+    if (currentValue > maxValue) {
+      maxValue = currentValue;
+      maxItem = array[i];
+    }
+  }
+
+  return maxItem;
+}
+
+/**
+ * Finds the minimum value for a specified key in a list of Near Earth Objects.
+ *
+ * @param {NearEarthObject[]} neoObjects - The list of Near Earth Objects to search.
+ * @param {NumericFilterKey} key - The key to determine the values for comparison.
+ * @returns {number | null} - The minimum value found, or null if the list is empty.
+ */
+export const findMinValueByKeyInNearEarthObjects = (
+  neoObjects: NearEarthObject[],
+  key: NumericFilterKey,
+) => findMinItem(neoObjects, (neo) => neo[key])?.[key];
+
+/**
+ * Finds the maximum value for a specified key in a list of Near Earth Objects.
+ *
+ * @param {NearEarthObject[]} neoObjects - The list of Near Earth Objects to search.
+ * @param {NumericFilterKey} key - The key to determine the values for comparison.
+ * @returns {number | null} - The maximum value found, or null if the list is empty.
+ */
+export const findMaxValueByKeyInNearEarthObjects = (
+  neoObjects: NearEarthObject[],
+  key: NumericFilterKey,
+) => findMaxItem(neoObjects, (neo) => neo[key])?.[key];
