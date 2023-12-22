@@ -1,14 +1,19 @@
 import * as React from 'react';
-import { PanGestureHandler } from 'react-native-gesture-handler';
-import type { PanGestureHandlerGestureEvent } from 'react-native-gesture-handler';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 
+import {
+  getElevation,
+  horizontalScale,
+  moderateScale,
+  verticalScale,
+} from '@/shared/utils';
+import { StyleSheet, TextInput, View } from 'react-native';
 import Animated, {
   runOnJS,
-  useAnimatedGestureHandler,
+  useAnimatedProps,
   useAnimatedStyle,
   useSharedValue,
 } from 'react-native-reanimated';
-import { View, StyleSheet } from 'react-native';
 
 type SliderProps = {
   sliderWidth: number;
@@ -18,10 +23,14 @@ type SliderProps = {
   onValueChange: (range: { min: number; max: number }) => void;
 };
 
-type ContextType = {
-  startX: number;
-  translateY: number;
-};
+const THUMB_SIZE = moderateScale(20);
+const THUMB_RADIUS = THUMB_SIZE / 2;
+const SLIDER_HEIGHT = verticalScale(8);
+const SLIDER_RADIUS = verticalScale(20);
+const VALUE_BOX_WIDTH = horizontalScale(30);
+const VALUE_BOX_OFFSET = horizontalScale(-5);
+const VALUE_BOX_PADDING_VERTICAL = verticalScale(2);
+const VALUE_BOX_MARGIN_TOP = verticalScale(10);
 
 export const Slider = ({
   sliderWidth,
@@ -30,102 +39,162 @@ export const Slider = ({
   step,
   onValueChange,
 }: SliderProps) => {
-  const minValuePosition = useSharedValue(0);
-  const maxValuePosition = useSharedValue(sliderWidth);
-  const opacity = useSharedValue(0);
+  const minXTranslation = useSharedValue(0);
+  const maxXTranslation = useSharedValue(sliderWidth);
+  const activeElement = useSharedValue<'max' | 'min'>('min');
 
-  const minValuePanGestureEvent = useAnimatedGestureHandler<
-    PanGestureHandlerGestureEvent,
-    ContextType
-  >({
-    onStart: (_, ctx) => {
-      ctx.startX = minValuePosition.value;
-    },
-    onActive: (e, ctx) => {
-      if (ctx.startX + e.translationX < 0) {
-        minValuePosition.value = 0;
-      } else if (ctx.startX + e.translationX > maxValuePosition.value) {
-        minValuePosition.value = maxValuePosition.value;
+  const context = useSharedValue({
+    x: 0,
+  });
+
+  const minGesturePan = Gesture.Pan()
+    .onStart(() => {
+      context.value = { x: minXTranslation.value };
+      activeElement.value = 'min';
+    })
+    .onUpdate((e) => {
+      if (context.value.x + e.translationX < 0) {
+        minXTranslation.value = 0;
+      } else if (context.value.x + e.translationX > maxXTranslation.value) {
+        minXTranslation.value = maxXTranslation.value;
       } else {
-        minValuePosition.value = ctx.startX + e.translationX;
+        minXTranslation.value = context.value.x + e.translationX;
       }
-    },
-    onEnd: () => {
-      opacity.value = 0;
+    })
+    .onEnd(() => {
       runOnJS(onValueChange)({
         min:
           min +
           Math.floor(
-            minValuePosition.value / (sliderWidth / ((max - min) / step)),
+            minXTranslation.value / (sliderWidth / ((max - min) / step)),
           ) *
             step,
         max:
           min +
           Math.floor(
-            maxValuePosition.value / (sliderWidth / ((max - min) / step)),
+            maxXTranslation.value / (sliderWidth / ((max - min) / step)),
           ) *
             step,
       });
-    },
-  });
+    });
 
-  const maxValuePanGestureEvent = useAnimatedGestureHandler<
-    PanGestureHandlerGestureEvent,
-    ContextType
-  >({
-    onStart: (_, ctx) => {
-      ctx.startX = maxValuePosition.value;
-    },
-    onActive: (e, ctx) => {
-      if (ctx.startX + e.translationX > sliderWidth) {
-        maxValuePosition.value = sliderWidth;
-      } else if (ctx.startX + e.translationX < minValuePosition.value) {
-        maxValuePosition.value = minValuePosition.value;
+  const maxGesturePan = Gesture.Pan()
+    .onStart(() => {
+      activeElement.value = 'max';
+      context.value = { x: maxXTranslation.value };
+    })
+    .onUpdate((e) => {
+      if (context.value.x + e.translationX > sliderWidth) {
+        maxXTranslation.value = sliderWidth;
+      } else if (context.value.x + e.translationX < minXTranslation.value) {
+        maxXTranslation.value = minXTranslation.value;
       } else {
-        maxValuePosition.value = ctx.startX + e.translationX;
+        maxXTranslation.value = context.value.x + e.translationX;
       }
-    },
-    onEnd: () => {
+    })
+    .onEnd(() => {
       runOnJS(onValueChange)({
         min:
           min +
           Math.floor(
-            minValuePosition.value / (sliderWidth / ((max - min) / step)),
+            minXTranslation.value / (sliderWidth / ((max - min) / step)),
           ) *
             step,
         max:
           min +
           Math.floor(
-            maxValuePosition.value / (sliderWidth / ((max - min) / step)),
+            maxXTranslation.value / (sliderWidth / ((max - min) / step)),
           ) *
             step,
       });
-    },
-  });
+    });
 
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ translateX: minValuePosition.value }],
+  const reanimatedMinValueStyles = useAnimatedStyle(() => ({
+    transform: [{ translateX: minXTranslation.value }],
+    zIndex: activeElement.value === 'min' ? 1 : 0,
   }));
 
-  const animatedStyle2 = useAnimatedStyle(() => ({
-    transform: [{ translateX: maxValuePosition.value }],
+  const reanimatedMaxValueStyles = useAnimatedStyle(() => ({
+    zIndex: activeElement.value === 'max' ? 1 : 0,
+    transform: [{ translateX: maxXTranslation.value }],
   }));
 
   const sliderStyle = useAnimatedStyle(() => ({
-    transform: [{ translateX: minValuePosition.value }],
-    width: maxValuePosition.value - minValuePosition.value,
+    transform: [{ translateX: minXTranslation.value }],
+    width: maxXTranslation.value - minXTranslation.value,
   }));
 
+  const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
+
+  const minLabelText = useAnimatedProps(() => {
+    return {
+      text: `${
+        min +
+        Math.floor(
+          minXTranslation.value / (sliderWidth / ((max - min) / step)),
+        ) *
+          step
+      }`,
+      defaultValue: `${
+        min +
+        Math.floor(
+          minXTranslation.value / (sliderWidth / ((max - min) / step)),
+        ) *
+          step
+      }`,
+    };
+  });
+
+  const maxLabelText = useAnimatedProps(() => {
+    return {
+      text: `${
+        min +
+        Math.floor(
+          maxXTranslation.value / (sliderWidth / ((max - min) / step)),
+        ) *
+          step
+      }`,
+      defaultValue: `${
+        min +
+        Math.floor(
+          maxXTranslation.value / (sliderWidth / ((max - min) / step)),
+        ) *
+          step
+      }`,
+    };
+  });
+
   return (
-    <View style={[styles.sliderContainer, { width: sliderWidth }]}>
-      <View style={[styles.sliderBack, { width: sliderWidth }]} />
-      <Animated.View style={[sliderStyle, styles.sliderFront]} />
-      <PanGestureHandler onGestureEvent={minValuePanGestureEvent}>
-        <Animated.View style={[animatedStyle, styles.thumb]} />
-      </PanGestureHandler>
-      <PanGestureHandler onGestureEvent={maxValuePanGestureEvent}>
-        <Animated.View style={[animatedStyle2, styles.thumb]} />
-      </PanGestureHandler>
+    <View>
+      <View style={[styles.sliderContainer, { width: sliderWidth }]}>
+        <View style={[styles.sliderBackground, { width: sliderWidth }]} />
+        <Animated.View style={[styles.sliderRange, sliderStyle]} />
+        <GestureDetector gesture={minGesturePan}>
+          <Animated.View style={[reanimatedMinValueStyles, styles.thumb]} />
+        </GestureDetector>
+
+        <GestureDetector gesture={maxGesturePan}>
+          <Animated.View style={[reanimatedMaxValueStyles, styles.thumb]} />
+        </GestureDetector>
+      </View>
+      <View style={styles.sliderValuesWrapper}>
+        <Animated.View
+          style={[styles.minValueContent, reanimatedMinValueStyles]}
+        >
+          <AnimatedTextInput
+            animatedProps={minLabelText}
+            style={styles.valueText}
+          />
+        </Animated.View>
+        <Animated.View
+          style={[styles.maxValueContent, reanimatedMaxValueStyles]}
+        >
+          <AnimatedTextInput
+            animatedProps={maxLabelText}
+            style={styles.valueText}
+          />
+        </Animated.View>
+      </View>
     </View>
   );
 };
@@ -134,44 +203,52 @@ const styles = StyleSheet.create({
   sliderContainer: {
     justifyContent: 'center',
     alignSelf: 'center',
-    backgroundColor: 'blue',
   },
-  sliderBack: {
-    height: 8,
+  sliderBackground: {
+    height: SLIDER_HEIGHT,
     backgroundColor: '#DFEAFB',
-    borderRadius: 20,
+    borderRadius: SLIDER_RADIUS,
   },
-  sliderFront: {
-    height: 8,
-    backgroundColor: '#3F4CF6',
-    borderRadius: 20,
+  sliderRange: {
+    height: SLIDER_HEIGHT,
+    backgroundColor: 'orange',
+    borderRadius: SLIDER_RADIUS,
     position: 'absolute',
   },
   thumb: {
-    left: -10,
-    width: 20,
-    height: 20,
+    left: -THUMB_RADIUS,
+    width: THUMB_SIZE,
+    height: THUMB_SIZE,
     position: 'absolute',
     backgroundColor: 'white',
-    borderColor: '#3F4CF6',
-    borderWidth: 5,
-    borderRadius: 10,
+    borderColor: 'orange',
+    borderWidth: 1,
+    borderRadius: THUMB_RADIUS,
+    ...getElevation({ elevation: 5 }),
   },
-  label: {
+  sliderValuesWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  minValueContent: {
     position: 'absolute',
-    top: -40,
-    bottom: 20,
-    backgroundColor: 'black',
-    borderRadius: 5,
-    alignSelf: 'center',
-    justifyContent: 'center',
-    alignItems: 'center',
+    marginTop: VALUE_BOX_MARGIN_TOP,
+    width: VALUE_BOX_WIDTH,
+    left: VALUE_BOX_OFFSET,
+    borderRadius: 4,
+    paddingVertical: VALUE_BOX_PADDING_VERTICAL,
+    backgroundColor: 'white',
+    ...getElevation({ elevation: 5 }),
   },
-  labelText: {
-    color: 'white',
-    padding: 5,
-    fontWeight: 'bold',
-    fontSize: 16,
-    width: '100%',
+  maxValueContent: {
+    position: 'absolute',
+    marginTop: VALUE_BOX_MARGIN_TOP,
+    width: VALUE_BOX_WIDTH,
+    left: VALUE_BOX_OFFSET,
+    borderRadius: 4,
+    paddingVertical: VALUE_BOX_PADDING_VERTICAL,
+    backgroundColor: 'white',
+    ...getElevation({ elevation: 5 }),
   },
+  valueText: { textAlign: 'center', fontWeight: '500' },
 });
