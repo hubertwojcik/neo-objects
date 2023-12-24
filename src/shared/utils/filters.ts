@@ -217,14 +217,16 @@ export const getFilterValue = <K extends NEOFilterKey>(
  */
 export const extractActiveNEOFilters = (
   filters: NEOFilterSettings,
+  neoObjects: NearEarthObject[],
 ): NEOFilterSettings => {
   const activeFilters: NEOFilterSettings = {};
 
   for (const [key, filter] of Object.entries(filters)) {
-    if (isActiveFilter([key as NEOFilterKey, filter])) {
+    if (isActiveFilter([key as NEOFilterKey, filter], neoObjects)) {
       activeFilters[key as NEOFilterKey] = filter;
     }
   }
+
   return activeFilters;
 };
 
@@ -240,13 +242,34 @@ export const extractActiveNEOFilters = (
  * const active = isActiveFilter(filterPair); // Returns true if the filter value is non-empty.
  * ```
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const isActiveFilter = ([_, val]: NEOFilterPair): boolean => {
+const isActiveFilter = (
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  [key, val]: NEOFilterPair,
+  neoObjects: NearEarthObject[],
+): boolean => {
   if (val === undefined) return false;
   const value = val.value;
   if (isString(value)) return !!value.trim();
   else if (isNumber(value)) return !!value;
   else if (isBoolean(value)) return true;
+  else if (isArray(value)) {
+    if (key === 'absolute_magnitude_h') {
+      const [min, max] = value;
+      return !(
+        min ===
+          (findMinValueByKeyInNearEarthObjects(
+            neoObjects,
+            'absolute_magnitude_h',
+          ) ?? 0) &&
+        (max ===
+          findMaxValueByKeyInNearEarthObjects(
+            neoObjects,
+            'absolute_magnitude_h',
+          ) ??
+          0)
+      );
+    }
+  }
   return false;
 };
 
@@ -319,3 +342,67 @@ export const findMaxValueByKeyInNearEarthObjects = (
   neoObjects: NearEarthObject[],
   key: NumericFilterKey,
 ) => findMaxItem(neoObjects, (neo) => neo[key])?.[key];
+
+/**
+ * Determines if two `NEOFilter` values are equal.
+ *
+ * This function compares two `NEOFilter` objects by checking if they are of the same type
+ * and if their `value` properties are equal when converted to strings. This is useful for
+ * comparing filters that might have different types of values (like strings, numbers, or booleans).
+ *
+ * @param firstFilter - The first `NEOFilter` object to compare.
+ * @param secondFilter - The second `NEOFilter` object to compare.
+ * @returns `true` if the types and string representations of `value` are the same for both filters, otherwise `false`.
+ *
+ * @example
+ * ```
+ * const filter1: TextFilter = { value: "Eros" };
+ * const filter2: TextFilter = { value: "Eros" };
+ * const isEqual = areFilterValuesEqual(filter1, filter2); // Returns true
+ * ```
+ */
+
+export const areFilterValuesEqual = (
+  firstFilter: NEOFilter,
+  secondFilter: NEOFilter,
+) =>
+  typeof firstFilter === typeof secondFilter &&
+  `${firstFilter.value}` === `${secondFilter.value}`;
+
+/**
+ * Checks if two `NEOFilterSettings` objects are equal.
+ *
+ * This function compares two `NEOFilterSettings` objects by converting them into sorted arrays of entries
+ * (`NEOFilterPair[]`) and then checking if every corresponding `NEOFilter` value is equal using `areFilterValuesEqual`.
+ * The comparison takes into account both the filter key and value. It ensures that two filter settings are considered
+ * equal only if they have the same set of filters with equal values.
+ *
+ * @param firstFilter - The first `NEOFilterSettings` object to compare.
+ * @param secondFilter - The second `NEOFilterSettings` object to compare.
+ * @returns `true` if both `NEOFilterSettings` objects contain the same filters with equal values, otherwise `false`.
+ *
+ * @example
+ * ```
+ * const settings1: NEOFilterSettings = { name: { value: "Eros" } };
+ * const settings2: NEOFilterSettings = { name: { value: "Eros" } };
+ * const isEqual = areSelectedFiltersTheSame(settings1, settings2); // Returns true
+ * ```
+ */
+export const areSelectedFiltersTheSame = (
+  firstFilter: NEOFilterSettings,
+  secondFilter: NEOFilterSettings,
+) => {
+  const firstFilterEntries = Object.entries(
+    firstFilter,
+  ).sort() as NEOFilterPair[];
+  const secondFilterEntries = Object.entries(
+    secondFilter,
+  ).sort() as NEOFilterPair[];
+
+  if (firstFilterEntries.length !== secondFilterEntries.length) return false;
+
+  return firstFilterEntries.every(([key, val], index) => {
+    const [secondKey, secondVal] = secondFilterEntries[index];
+    return key === secondKey && areFilterValuesEqual(val, secondVal);
+  });
+};
