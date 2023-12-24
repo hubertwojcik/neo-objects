@@ -8,6 +8,7 @@ module.exports = function (api) {
         {
           alias: {
             '@': './src',
+            '@env': './src/clientEnv.js',
           },
         },
       ],
