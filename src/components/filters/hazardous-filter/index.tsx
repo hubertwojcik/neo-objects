@@ -42,16 +42,25 @@ export const HazardousFilter = ({ setValue, value }: HazardousFilterProps) => {
     };
   });
 
+  React.useEffect(() => {
+    if (value === undefined) {
+      hazardousPosition.value = withSpring(0, {
+        damping: ANIMATION_DAMPING,
+      });
+    } else if (value) {
+      hazardousPosition.value = withSpring(ITEM_SIZE, {
+        damping: ANIMATION_DAMPING,
+      });
+    } else {
+      hazardousPosition.value = withSpring(2 * ITEM_SIZE, {
+        damping: ANIMATION_DAMPING,
+      });
+    }
+  }, [value]);
+
   const onResetHazardousFilter = () => {
     setValue(undefined);
     hazardousPosition.value = withSpring(0);
-  };
-
-  const onHazardousSelection = (animatedPosition: number, value?: boolean) => {
-    setValue(value);
-    hazardousPosition.value = withSpring(animatedPosition, {
-      damping: ANIMATION_DAMPING,
-    });
   };
 
   return (
@@ -70,10 +79,10 @@ export const HazardousFilter = ({ setValue, value }: HazardousFilterProps) => {
             reanimaetdStyles,
           ]}
         />
-        {HAZARDOUS_OPTIONS.map((i, idx) => (
+        {HAZARDOUS_OPTIONS.map((i) => (
           <Pressable
             key={i.id}
-            onPress={() => onHazardousSelection(ITEM_SIZE * idx, i.value)}
+            onPress={() => setValue(i.value)}
             style={{
               width: ITEM_SIZE,
             }}
@@ -94,7 +103,7 @@ const styles = StyleSheet.create({
     borderRadius: FILTER_ITEM_HEIGHT,
     paddingVertical: verticalScale(10),
     position: 'relative',
-    height: 40,
+    height: FILTER_ITEM_HEIGHT,
     ...getElevation({
       elevation: 2,
     }),
