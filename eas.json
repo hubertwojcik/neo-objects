@@ -22,7 +22,6 @@
     },
     "development": {
       "channel": "development",
-      "developmentClient": true,
       "distribution": "internal",
       "android": {
         "image": "latest"
