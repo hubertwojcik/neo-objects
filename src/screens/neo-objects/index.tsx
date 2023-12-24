@@ -1,13 +1,15 @@
-import { useGetAllNeoObjects } from '@/api/neo-objects/get-neo-objects';
+import { useGetNeoObjects } from '@/api/neo-objects/use-get-neo-objects';
 import { Asteroid, DateChanger, NeoObjectListItem } from '@/components';
-import { useChangeDate } from '@/core/hooks';
+import { useChangeDate, useFilterNeoObjects } from '@/core/hooks';
+import { useNeoObjectsStore } from '@/core/store';
 import { colors, verticalScale } from '@/shared/utils';
 import { Ionicons } from '@expo/vector-icons';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { FlatList, Pressable, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import type { NeoObjectsStackParamList } from '../../navigation/neo-objects-navigator';
+
 import { styles } from './styles';
 
 type NeoObjectsScreenProps = NativeStackScreenProps<
@@ -18,14 +20,10 @@ type NeoObjectsScreenProps = NativeStackScreenProps<
 export const NeoObjects = ({ navigation }: NeoObjectsScreenProps) => {
   const { date, decrementDate, incrementDate } = useChangeDate();
 
-  const { data, refetch } = useGetAllNeoObjects({
-    startDate: date,
-    endDate: date,
-  });
+  const { filters } = useNeoObjectsStore();
 
-  useEffect(() => {
-    refetch();
-  }, [date]);
+  const { neoObjects, isLoading } = useGetNeoObjects(date);
+  const filteredData = useFilterNeoObjects(neoObjects || [], filters);
 
   const contactsPlaceholderList = useMemo(() => {
     return Array.from({ length: 15 }).map(() => null);
@@ -54,7 +52,9 @@ export const NeoObjects = ({ navigation }: NeoObjectsScreenProps) => {
           />
         </View>
         <FlatList
-          data={data?.near_earth_objects[date] ?? contactsPlaceholderList}
+          data={
+            !neoObjects || isLoading ? contactsPlaceholderList : filteredData
+          }
           style={styles.neoListStyle}
           ItemSeparatorComponent={() => {
             return <View style={styles.neoListSeparator} />;

@@ -1,4 +1,4 @@
-import type { NearEarthObject } from '@/api/neo-objects';
+import type { NearEarthObject } from '@/shared/types';
 import { colors, verticalScale } from '@/shared/utils';
 import { AntDesign } from '@expo/vector-icons';
 import { Skeleton } from 'moti/skeleton';
@@ -80,11 +80,11 @@ export const NeoObjectListItem = ({
               <View style={styles.expandedDetailContainer}>
                 <Text>Estimated diameter </Text>
                 <Text>
-                  {item?.estimated_diameter.meters.estimated_diameter_min.toFixed(
+                  {item?.estimated_diameter?.meters.estimated_diameter_min.toFixed(
                     2,
                   )}
                   -
-                  {item?.estimated_diameter.meters.estimated_diameter_max.toFixed(
+                  {item?.estimated_diameter?.meters.estimated_diameter_max.toFixed(
                     2,
                   )}{' '}
                   m
