@@ -22,7 +22,8 @@ export const NeoObjects = ({ navigation }: NeoObjectsScreenProps) => {
 
   const { filters } = useNeoObjectsStore();
 
-  const { neoObjects, isLoading } = useGetNeoObjects(date);
+  const { neoObjects, isLoading, isError } = useGetNeoObjects(date);
+
   const filteredData = useFilterNeoObjects(neoObjects || [], filters);
 
   const contactsPlaceholderList = useMemo(() => {
@@ -54,6 +55,17 @@ export const NeoObjects = ({ navigation }: NeoObjectsScreenProps) => {
         <FlatList
           data={
             !neoObjects || isLoading ? contactsPlaceholderList : filteredData
+          }
+          ListEmptyComponent={
+            !isError ? (
+              <View>
+                <Text>qweqweqw</Text>
+              </View>
+            ) : (
+              <View>
+                <Text>Wystąpił błąd, spróbuj ponownie</Text>
+              </View>
+            )
           }
           style={styles.neoListStyle}
           ItemSeparatorComponent={() => {

@@ -14,12 +14,12 @@ export const useRangeMinMaxValues = (
   key: NumericFilterKey,
 ) => {
   const minValue = useMemo(
-    () => findMinValueByKeyInNearEarthObjects(neoObjects, key) ?? 0,
+    () => Math.floor(findMinValueByKeyInNearEarthObjects(neoObjects, key) ?? 0),
     [neoObjects, key],
   );
 
   const maxValue = useMemo(
-    () => findMaxValueByKeyInNearEarthObjects(neoObjects, key) ?? 0,
+    () => Math.ceil(findMaxValueByKeyInNearEarthObjects(neoObjects, key) ?? 0),
     [neoObjects, key],
   );
 
@@ -29,8 +29,8 @@ export const useRangeMinMaxValues = (
   );
 
   return {
-    minValue: Math.ceil(minValue),
-    maxValue: Math.ceil(maxValue),
+    minValue,
+    maxValue,
     initialRangeFilter,
   };
 };
