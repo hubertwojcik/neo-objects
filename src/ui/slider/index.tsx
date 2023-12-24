@@ -13,7 +13,9 @@ import Animated, {
   useAnimatedProps,
   useAnimatedStyle,
   useSharedValue,
+  withTiming,
 } from 'react-native-reanimated';
+import { useEffect } from 'react';
 
 type SliderProps = {
   sliderWidth: number;
@@ -21,14 +23,16 @@ type SliderProps = {
   max: number;
   step: number;
   onValueChange: (range: { min: number; max: number }) => void;
+  maxValue: number;
+  minValue: number;
 };
 
 const THUMB_SIZE = moderateScale(20);
 const THUMB_RADIUS = THUMB_SIZE / 2;
 const SLIDER_HEIGHT = verticalScale(8);
 const SLIDER_RADIUS = verticalScale(20);
-const VALUE_BOX_WIDTH = horizontalScale(30);
-const VALUE_BOX_OFFSET = horizontalScale(-5);
+const VALUE_BOX_WIDTH = horizontalScale(35);
+const VALUE_BOX_OFFSET = horizontalScale(-7.5);
 const VALUE_BOX_PADDING_VERTICAL = verticalScale(2);
 const VALUE_BOX_MARGIN_TOP = verticalScale(10);
 
@@ -38,6 +42,8 @@ export const Slider = ({
   max,
   step,
   onValueChange,
+  maxValue,
+  minValue,
 }: SliderProps) => {
   const minXTranslation = useSharedValue(0);
   const maxXTranslation = useSharedValue(sliderWidth);
@@ -46,6 +52,30 @@ export const Slider = ({
   const context = useSharedValue({
     x: 0,
   });
+
+  useEffect(() => {
+    if (minValue !== min) {
+      if (minValue > min) {
+        minXTranslation.value = Math.ceil(
+          ((minValue - min) * sliderWidth) / (max - min),
+        );
+      } else {
+        minXTranslation.value = Math.ceil(
+          ((min - minValue) * sliderWidth) / (max - min),
+        );
+      }
+    } else {
+      minXTranslation.value = withTiming(0);
+    }
+
+    if (max !== maxValue) {
+      maxXTranslation.value = Math.ceil(
+        sliderWidth - ((max - maxValue) * sliderWidth) / (max - min),
+      );
+    } else {
+      maxXTranslation.value = withTiming(sliderWidth);
+    }
+  }, [minValue, maxValue, max, min]);
 
   const minGesturePan = Gesture.Pan()
     .onStart(() => {
@@ -69,13 +99,9 @@ export const Slider = ({
             minXTranslation.value / (sliderWidth / ((max - min) / step)),
           ) *
             step,
-        max:
-          min +
-          Math.floor(
-            maxXTranslation.value / (sliderWidth / ((max - min) / step)),
-          ) *
-            step,
+        max: maxValue,
       });
+      context.value = { x: 0 };
     });
 
   const maxGesturePan = Gesture.Pan()
@@ -94,12 +120,7 @@ export const Slider = ({
     })
     .onEnd(() => {
       runOnJS(onValueChange)({
-        min:
-          min +
-          Math.floor(
-            minXTranslation.value / (sliderWidth / ((max - min) / step)),
-          ) *
-            step,
+        min: minValue,
         max:
           min +
           Math.floor(
@@ -107,6 +128,8 @@ export const Slider = ({
           ) *
             step,
       });
+
+      context.value = { x: 0 };
     });
 
   const reanimatedMinValueStyles = useAnimatedStyle(() => ({
@@ -144,7 +167,6 @@ export const Slider = ({
       }`,
     };
   });
-
   const maxLabelText = useAnimatedProps(() => {
     return {
       text: `${
@@ -184,6 +206,7 @@ export const Slider = ({
           <AnimatedTextInput
             animatedProps={minLabelText}
             style={styles.valueText}
+            value={minValue.toString()}
           />
         </Animated.View>
         <Animated.View
@@ -192,6 +215,7 @@ export const Slider = ({
           <AnimatedTextInput
             animatedProps={maxLabelText}
             style={styles.valueText}
+            value={maxValue.toString()}
           />
         </Animated.View>
       </View>
