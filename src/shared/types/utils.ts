@@ -68,3 +68,6 @@ export type MapValuesFunction = <T, U>(
 export type PickByType<T, U> = {
   [P in keyof T as T[P] extends U ? P : never]: T[P];
 };
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type AnyObject = { [key: string]: any };
