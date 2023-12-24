@@ -1,5 +1,6 @@
 import axios from 'axios';
+import Env from '@env';
 
 export const client = axios.create({
-  baseURL: 'https://api.nasa.gov/neo/rest/v1',
+  baseURL: Env.API_URL,
 });

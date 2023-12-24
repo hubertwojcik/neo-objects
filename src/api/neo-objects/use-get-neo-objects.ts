@@ -9,10 +9,11 @@ export const useGetNeoObjects = (date: string) => {
   const neoObjects = useNeoObjectsStore((state) => state.neoObjects);
 
   const setNeoObjects = useNeoObjectsStore((state) => state.setNeoObjects);
+  const setFilters = useNeoObjectsStore((state) => state.setFilters);
 
   const qrClient = useQueryClient();
 
-  const { data, isFetching, isLoading } = useQuery({
+  const { data, isFetching, isLoading, isError, error } = useQuery({
     queryFn: () =>
       getAllNeoObjects({
         startDate: date,
@@ -28,6 +29,7 @@ export const useGetNeoObjects = (date: string) => {
   }, [data, setNeoObjects]);
 
   useEffect(() => {
+    setFilters({});
     qrClient.invalidateQueries({
       queryKey: [...neoObjectsFactory.neoObjects, { date }],
     });
@@ -37,5 +39,7 @@ export const useGetNeoObjects = (date: string) => {
     neoObjects,
     isFetching,
     isLoading,
+    isError,
+    error,
   };
 };
