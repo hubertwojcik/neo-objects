@@ -12,7 +12,8 @@
     "baseUrl": ".",
     "allowJs": true,
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@env": ["./src/clientEnv.js"]
     }
   },
   "include": ["**/*.ts", "**/*.tsx", "src/screens/welcome/index.tss"],
