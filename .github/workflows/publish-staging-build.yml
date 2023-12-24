@@ -5,7 +5,7 @@ on:
       - staging
 jobs:
   publish:
-    runs-on: ubunut-latest
+    runs-on: ubuntu-latest
     permissions:
       contents: read
       pull-requests: write
