@@ -71,3 +71,5 @@ export type PickByType<T, U> = {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type AnyObject = { [key: string]: any };
+
+export type Point = { x: number; y: number };
