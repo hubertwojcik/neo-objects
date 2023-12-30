@@ -26,7 +26,13 @@ export const NeoObjectsNavigator = () => {
           headerShown: true,
         }}
       >
-        <Stack.Screen name="NeoObjectDetails" component={NeoObjectDetails} />
+        <Stack.Screen
+          name="NeoObjectDetails"
+          component={NeoObjectDetails}
+          options={{
+            headerShown: false,
+          }}
+        />
       </Stack.Group>
       <Stack.Group
         screenOptions={{
