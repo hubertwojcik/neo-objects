@@ -41,7 +41,7 @@ export const Filters = ({ navigation }: FiltersScreenProps) => {
     initialRangeFilter: initialMagnitudeFilter,
     maxValue: maxMagnitude,
     minValue: minMagnitude,
-  } = useRangeMinMaxValues(neoObjects || [], 'absolute_magnitude_h');
+  } = useRangeMinMaxValues(neoObjects || [], 'absoluteMagnitudeH');
 
   const {
     filterState: { name, absoluteMagnitude, isPotentiallyHazardous },
@@ -51,11 +51,11 @@ export const Filters = ({ navigation }: FiltersScreenProps) => {
   } = useFilterState({
     name: getFilterValue('name', filters) || '',
     isPotentiallyHazardous: getFilterValue(
-      'is_potentially_hazardous_asteroid',
+      'isPotentiallyHazardousAsteroid',
       filters,
     ),
     absoluteMagnitude:
-      getFilterValue('absolute_magnitude_h', filters) || initialMagnitudeFilter,
+      getFilterValue('absoluteMagnitudeH', filters) || initialMagnitudeFilter,
   });
 
   const onApplyFilters = () => {
@@ -72,9 +72,9 @@ export const Filters = ({ navigation }: FiltersScreenProps) => {
   useEffect(() => {
     setLocalFilters(
       createNEOFilterSettings({
-        is_potentially_hazardous_asteroid: isPotentiallyHazardous,
+        isPotentiallyHazardousAsteroid: isPotentiallyHazardous,
         name,
-        absolute_magnitude_h: absoluteMagnitude,
+        absoluteMagnitudeH: absoluteMagnitude,
       }),
     );
   }, [name, absoluteMagnitude, isPotentiallyHazardous]);
