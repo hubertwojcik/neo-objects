@@ -31,8 +31,8 @@ const THUMB_SIZE = moderateScale(20);
 const THUMB_RADIUS = THUMB_SIZE / 2;
 const SLIDER_HEIGHT = verticalScale(8);
 const SLIDER_RADIUS = verticalScale(20);
-const VALUE_BOX_WIDTH = horizontalScale(35);
-const VALUE_BOX_OFFSET = horizontalScale(-7.5);
+const VALUE_BOX_WIDTH = horizontalScale(40);
+const VALUE_BOX_OFFSET = horizontalScale(-10);
 const VALUE_BOX_PADDING_VERTICAL = verticalScale(2);
 const VALUE_BOX_MARGIN_TOP = verticalScale(10);
 
@@ -187,7 +187,7 @@ export const Slider = ({
   });
 
   return (
-    <View>
+    <View style={{ marginBottom: verticalScale(12) }}>
       <View style={[styles.sliderContainer, { width: sliderWidth }]}>
         <View style={[styles.sliderBackground, { width: sliderWidth }]} />
         <Animated.View style={[styles.sliderRange, sliderStyle]} />
@@ -261,7 +261,7 @@ const styles = StyleSheet.create({
     left: VALUE_BOX_OFFSET,
     borderRadius: 4,
     paddingVertical: VALUE_BOX_PADDING_VERTICAL,
-    backgroundColor: 'white',
+
     ...getElevation({ elevation: 5 }),
   },
   maxValueContent: {
@@ -271,7 +271,7 @@ const styles = StyleSheet.create({
     left: VALUE_BOX_OFFSET,
     borderRadius: 4,
     paddingVertical: VALUE_BOX_PADDING_VERTICAL,
-    backgroundColor: 'white',
+
     ...getElevation({ elevation: 5 }),
   },
   valueText: { textAlign: 'center', fontWeight: '500' },
