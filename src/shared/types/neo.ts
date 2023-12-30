@@ -1,4 +1,4 @@
-export type NearEarthObject = {
+export type NearEarthObjectRaw = {
   links: Link;
   id: string;
   neo_reference_id: string;
@@ -9,6 +9,15 @@ export type NearEarthObject = {
   is_potentially_hazardous_asteroid: boolean;
   close_approach_data: CloseApproachData[];
   is_sentry_object: boolean;
+};
+
+export type NearEarthObject = {
+  id: string;
+  name: string;
+  isPotentiallyHazardousAsteroid: boolean;
+  absoluteMagnitudeH: number;
+  estimatedDiameterMinMeters: number;
+  estimatedDiameterMaxMeters: number;
 };
 
 export type CloseApproachData = {
@@ -55,6 +64,6 @@ export type NeoObjectReponseData = {
   links: Link;
   element_count: number;
   near_earth_objects: {
-    [key: string]: NearEarthObject[];
+    [key: string]: NearEarthObjectRaw[];
   };
 };
