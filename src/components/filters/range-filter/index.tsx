@@ -4,7 +4,8 @@ import { useWindowDimensions } from 'react-native';
 import { Slider } from '@/ui';
 import { FilterItem } from '../filter-item';
 
-type MagnitudeFilterProps = {
+type RangeFilterProps = {
+  title: string;
   min: number;
   max: number;
   minRange: number;
@@ -14,17 +15,18 @@ type MagnitudeFilterProps = {
 
 const STEPS = 10;
 
-export const MagnitudeFilter = ({
+export const RangeFilter = ({
+  title,
   setValues,
   max,
   min,
   maxRange,
   minRange,
-}: MagnitudeFilterProps) => {
+}: RangeFilterProps) => {
   const { width } = useWindowDimensions();
   return (
     <FilterItem
-      title="Magnitude range"
+      title={title}
       canReset
       onResetPress={() => setValues({ min: minRange, max: maxRange })}
     >
