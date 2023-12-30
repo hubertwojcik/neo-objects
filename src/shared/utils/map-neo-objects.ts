@@ -6,9 +6,11 @@ export const mapNeoObjects = (raw: NearEarthObjectRaw[]): NearEarthObject[] => {
     name: neo.name,
     absoluteMagnitudeH: neo.absolute_magnitude_h,
     isPotentiallyHazardousAsteroid: neo.is_potentially_hazardous_asteroid,
-    estimatedDiameterMinMeters:
-      neo.estimated_diameter.meters.estimated_diameter_min,
-    estimatedDiameterMaxMeters:
-      neo.estimated_diameter.meters.estimated_diameter_max,
+    estimatedDiameterMinMeters: Number(
+      neo.estimated_diameter.meters.estimated_diameter_min.toFixed(2),
+    ),
+    estimatedDiameterMaxMeters: Number(
+      neo.estimated_diameter.meters.estimated_diameter_max.toFixed(2),
+    ),
   }));
 };

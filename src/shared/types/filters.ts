@@ -20,6 +20,10 @@ export type NEOFilterCriteriaMap = {
   absoluteMagnitudeH: NumberRange;
   /** Filters based on whether the NEO is potentially hazardous. Optional. */
   isPotentiallyHazardousAsteroid?: boolean;
+  /** Filters by the estimaated diameter of the NEO. Expects a `NumberRange` type. */
+  estimatedDiameterMinMeters: NumberRange;
+  /** Filters by the estimaated diameter of the NEO. Expects a `NumberRange` type. */
+  estimatedDiameterMaxMeters: NumberRange;
 };
 
 /**

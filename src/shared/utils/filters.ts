@@ -120,8 +120,8 @@ export const mapNEOFilters: MapValuesFunction = (
  *
  * @example
  * ```
- * const filterSettings = createNEOFilterSettings({ name: 'Eros', absolute_magnitude_h: [5.0, 10.0] });
- * // Returns: { name: { value: 'Eros' }, absolute_magnitude_h: { value: [5.0, 10.0] } }
+ * const filterSettings = createNEOFilterSettings({ name: 'Eros', absoluteMagnitudeH: [5.0, 10.0] });
+ * // Returns: { name: { value: 'Eros' }, absoluteMagnitudeH: { value: [5.0, 10.0] } }
  * ```
  */
 export const createNEOFilterSettings = (
@@ -253,20 +253,15 @@ const isActiveFilter = (
   else if (isNumber(value)) return !!value;
   else if (isBoolean(value)) return true;
   else if (isArray(value)) {
-    if (key === 'absoluteMagnitudeH') {
-      const [min, max] = value;
+    const [min, max] = value;
+    if (
+      key === 'absoluteMagnitudeH' ||
+      key === 'estimatedDiameterMaxMeters' ||
+      key === 'estimatedDiameterMinMeters'
+    ) {
       return !(
-        min ===
-          (findMinValueByKeyInNearEarthObjects(
-            neoObjects,
-            'absoluteMagnitudeH',
-          ) ?? 0) &&
-        (max ===
-          findMaxValueByKeyInNearEarthObjects(
-            neoObjects,
-            'absoluteMagnitudeH',
-          ) ??
-          0)
+        min === (findMinValueByKeyInNearEarthObjects(neoObjects, key) ?? 0) &&
+        (max === findMaxValueByKeyInNearEarthObjects(neoObjects, key) ?? 0)
       );
     }
   }
