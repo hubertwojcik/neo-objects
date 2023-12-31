@@ -4,14 +4,14 @@ import { StyleSheet } from 'react-native';
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.white,
+    backgroundColor: '#F8F4E9',
   },
   screenTitle: {
     fontSize: 26,
-    fontWeight: '600',
-    letterSpacing: 1,
     textAlign: 'center',
     color: colors.dark,
+    fontFamily: 'Poppins-SemiBold',
+    textTransform: 'uppercase',
   },
   neoListContainer: { flex: 3, paddingHorizontal: horizontalScale(10) },
   neoListStyle: {
