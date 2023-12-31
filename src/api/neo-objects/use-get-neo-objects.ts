@@ -25,7 +25,8 @@ export const useGetNeoObjects = (date: string) => {
 
   useEffect(() => {
     if (data) {
-      const mappedObjects = mapNeoObjects(data.near_earth_objects[date]);
+      const objects = data.near_earth_objects[date];
+      const mappedObjects = mapNeoObjects(objects || []);
       setNeoObjects(mappedObjects);
     }
   }, [data, setNeoObjects]);
