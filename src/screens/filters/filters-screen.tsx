@@ -91,6 +91,8 @@ export const Filters = ({ navigation }: FiltersScreenProps) => {
     setName('');
     setIsPotentiallyHazardous(undefined);
     setAbsoluteMagnitude([minMagnitude, maxMagnitude]);
+    setMinEstimatedDiameter([minMinEstimatedDiameter, maxMinEstimatedDiameter]);
+    setMaxEstimatedDiameter([minMaxEstimatedDiameter, maxMaxEstimatedDiameter]);
   }, []);
 
   useEffect(() => {
@@ -218,7 +220,7 @@ const styles = StyleSheet.create({
     paddingVertical: verticalScale(14),
     alignSelf: 'center',
     paddingHorizontal: horizontalScale(20),
-    backgroundColor: 'orange',
+    backgroundColor: '#2c2c2c',
     width: horizontalScale(200),
     borderRadius: verticalScale(40),
     ...getElevation({
@@ -228,7 +230,7 @@ const styles = StyleSheet.create({
   filtersApplyText: {
     textAlign: 'center',
     color: 'white',
-    fontWeight: '600',
-    fontSize: normalize(20),
+    fontSize: normalize(16),
+    fontWeight: '500',
   },
 });
