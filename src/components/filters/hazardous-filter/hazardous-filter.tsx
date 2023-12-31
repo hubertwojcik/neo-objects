@@ -7,7 +7,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { Text } from 'react-native';
 import * as React from 'react';
-import { getElevation, verticalScale } from '@/shared/utils';
+import { getElevation, horizontalScale, verticalScale } from '@/shared/utils';
 
 type HazardousFilterProps = {
   setValue: (val?: boolean) => void;
@@ -22,7 +22,7 @@ const HAZARDOUS_OPTIONS = [
 
 const FILTER_ITEM_HEIGHT = verticalScale(40);
 const ANIMATION_DAMPING = 12;
-const SCREEN_PADDING_HORIZONTAL = 10;
+const SCREEN_PADDING_HORIZONTAL = horizontalScale(10);
 
 export const HazardousFilter = ({ setValue, value }: HazardousFilterProps) => {
   const { width } = useWindowDimensions();
