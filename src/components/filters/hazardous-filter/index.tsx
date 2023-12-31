@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
   activeFilterIndicator: {
     position: 'absolute',
     height: FILTER_ITEM_HEIGHT,
-    backgroundColor: 'orange',
+    backgroundColor: '#FFBB3B',
     borderRadius: FILTER_ITEM_HEIGHT,
   },
   filterName: {
