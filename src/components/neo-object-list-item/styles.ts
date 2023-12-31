@@ -22,7 +22,8 @@ export const styles = StyleSheet.create({
   },
   listItemSkeletonWrapper: { paddingVertical: verticalScale(10) },
   listItemTitle: {
-    color: colors.dark,
+    color: '#1A1A1A',
+    fontWeight: '600',
     fontSize: 16,
   },
   hazardousIconWrapper: { marginRight: horizontalScale(10) },
