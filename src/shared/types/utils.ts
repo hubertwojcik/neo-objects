@@ -73,3 +73,5 @@ export type PickByType<T, U> = {
 export type AnyObject = { [key: string]: any };
 
 export type Point = { x: number; y: number };
+
+export type Nullabe<T> = T | null;
