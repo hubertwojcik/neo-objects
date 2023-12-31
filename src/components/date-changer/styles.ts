@@ -11,5 +11,6 @@ export const styles = StyleSheet.create({
     fontSize: 20,
     color: colors.dark,
     marginBottom: verticalScale(12),
+    fontFamily: 'Poppins-SemiBold',
   },
 });
