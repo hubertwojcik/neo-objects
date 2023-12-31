@@ -235,7 +235,7 @@ const styles = StyleSheet.create({
   },
   sliderRange: {
     height: SLIDER_HEIGHT,
-    backgroundColor: 'orange',
+    backgroundColor: '#FFBB3B',
     borderRadius: SLIDER_RADIUS,
     position: 'absolute',
   },
@@ -245,7 +245,7 @@ const styles = StyleSheet.create({
     height: THUMB_SIZE,
     position: 'absolute',
     backgroundColor: 'white',
-    borderColor: 'orange',
+    borderColor: '#FFBB3B',
     borderWidth: 1,
     borderRadius: THUMB_RADIUS,
     ...getElevation({ elevation: 5 }),
