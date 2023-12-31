@@ -6,7 +6,7 @@ import { StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { EstimatedDiameterDetails } from './estimated-diameter-details';
 
-import { PlainNeoDetail } from './plan-neo-detail';
+import { PlainNeoDetail } from './plain-neo-detail';
 import { RelativeVelocityDetails } from './relative-velocity-details';
 
 type NeoObjectDetailsListProps = { details: Nullabe<NeoObjectDetails> };
