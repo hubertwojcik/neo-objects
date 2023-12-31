@@ -6,6 +6,7 @@ export type NeoObjectsStackParamList = {
   NeoObjects: undefined;
   NeoObjectDetails: {
     id: string;
+    objectName: string;
   };
   Filters: undefined;
 };
