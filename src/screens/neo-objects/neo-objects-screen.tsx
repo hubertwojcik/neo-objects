@@ -59,7 +59,7 @@ export const NeoObjects = ({ navigation }: NeoObjectsScreenProps) => {
           ListEmptyComponent={
             !isError ? (
               <View>
-                <Text>qweqweqw</Text>
+                <Text>There are no NEO Objects to show</Text>
               </View>
             ) : (
               <View>
@@ -79,6 +79,7 @@ export const NeoObjects = ({ navigation }: NeoObjectsScreenProps) => {
                   item &&
                   navigation.navigate('NeoObjectDetails', {
                     id: item.id,
+                    objectName: item.name,
                   })
                 }
               />
