@@ -125,7 +125,7 @@ export const Filters = ({ navigation }: FiltersScreenProps) => {
       style={[
         styles.screenContainer,
         {
-          paddingBottom: insets.bottom,
+          paddingBottom: insets.bottom + verticalScale(20),
         },
       ]}
     >
