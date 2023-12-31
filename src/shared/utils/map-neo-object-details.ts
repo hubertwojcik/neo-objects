@@ -25,7 +25,6 @@ export const mapNeoObjectDetails = (
     isPotentiallyHazardousAsteroid: neo.is_potentially_hazardous_asteroid,
     absoluteMagnitude: neo.absolute_magnitude_h,
     isSentryObject: neo.is_sentry_object,
-
     previousApproachDate: previousApproach
       ? previousApproach.close_approach_date_full
       : 'N/A',
