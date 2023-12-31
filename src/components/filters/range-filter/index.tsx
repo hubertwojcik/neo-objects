@@ -13,7 +13,7 @@ type RangeFilterProps = {
   setValues: (range: { min: number; max: number }) => void;
 };
 
-const STEPS = 10;
+const STEPS = 20;
 
 export const RangeFilter = ({
   title,
