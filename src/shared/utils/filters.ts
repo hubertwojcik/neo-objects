@@ -120,8 +120,8 @@ export const mapNEOFilters: MapValuesFunction = (
  *
  * @example
  * ```
- * const filterSettings = createNEOFilterSettings({ name: 'Eros', absolute_magnitude_h: [5.0, 10.0] });
- * // Returns: { name: { value: 'Eros' }, absolute_magnitude_h: { value: [5.0, 10.0] } }
+ * const filterSettings = createNEOFilterSettings({ name: 'Eros', absoluteMagnitudeH: [5.0, 10.0] });
+ * // Returns: { name: { value: 'Eros' }, absoluteMagnitudeH: { value: [5.0, 10.0] } }
  * ```
  */
 export const createNEOFilterSettings = (
@@ -211,8 +211,8 @@ export const getFilterValue = <K extends NEOFilterKey>(
  *
  * @example
  * ```
- * const activeFilters = extractActiveNEOFilters({ name: { value: 'Eros' }, is_potentially_hazardous_asteroid: { value: true } });
- * // Returns: { name: { value: 'Eros' }, is_potentially_hazardous_asteroid: { value: true } }
+ * const activeFilters = extractActiveNEOFilters({ name: { value: 'Eros' }, isPotentiallyHazardousAsteroid: { value: true } });
+ * // Returns: { name: { value: 'Eros' }, isPotentiallyHazardousAsteroid: { value: true } }
  * ```
  */
 export const extractActiveNEOFilters = (
@@ -253,20 +253,15 @@ const isActiveFilter = (
   else if (isNumber(value)) return !!value;
   else if (isBoolean(value)) return true;
   else if (isArray(value)) {
-    if (key === 'absolute_magnitude_h') {
-      const [min, max] = value;
+    const [min, max] = value;
+    if (
+      key === 'absoluteMagnitudeH' ||
+      key === 'estimatedDiameterMaxMeters' ||
+      key === 'estimatedDiameterMinMeters'
+    ) {
       return !(
-        min ===
-          (findMinValueByKeyInNearEarthObjects(
-            neoObjects,
-            'absolute_magnitude_h',
-          ) ?? 0) &&
-        (max ===
-          findMaxValueByKeyInNearEarthObjects(
-            neoObjects,
-            'absolute_magnitude_h',
-          ) ??
-          0)
+        min === (findMinValueByKeyInNearEarthObjects(neoObjects, key) ?? 0) &&
+        (max === findMaxValueByKeyInNearEarthObjects(neoObjects, key) ?? 0)
       );
     }
   }

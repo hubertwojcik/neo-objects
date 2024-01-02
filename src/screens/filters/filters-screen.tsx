@@ -1,28 +1,25 @@
 import type { NeoObjectsStackParamList } from '@/navigation/neo-objects-navigator';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React, { useCallback, useEffect, useMemo } from 'react';
-import { Pressable, Text, View, ScrollView, StyleSheet } from 'react-native';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
-import {
-  HazardousFilter,
-  MagnitudeFilter,
-  NameFilter,
-} from '@/components/filters';
+import { HazardousFilter, NameFilter, RangeFilter } from '@/components/filters';
+import { useRangeMinMaxValues } from '@/core/hooks';
 import { useNeoObjectsStore } from '@/core/store';
 import {
   areSelectedFiltersTheSame,
+  colors,
   createNEOFilterSettings,
+  extractActiveNEOFilters,
   getElevation,
   getFilterValue,
   horizontalScale,
   normalize,
   verticalScale,
 } from '@/shared/utils';
+import { AntDesign } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useFilterState } from './use-filters-state';
-import { useLocalFilters } from './use-local-filters';
-import { useRangeMinMaxValues } from '@/core/hooks';
-import { AntDesign } from '@expo/vector-icons';
 
 type FiltersScreenProps = NativeStackScreenProps<
   NeoObjectsStackParamList,
@@ -32,30 +29,58 @@ type FiltersScreenProps = NativeStackScreenProps<
 export const Filters = ({ navigation }: FiltersScreenProps) => {
   const { filters, setFilters, neoObjects } = useNeoObjectsStore();
 
-  const { setLocalFilters, filteredLocalFilters } = useLocalFilters(
-    filters,
-    neoObjects || [],
+  const [localFilters, setLocalFilters] = useState(filters);
+
+  const filteredLocalFilters = useMemo(
+    () => extractActiveNEOFilters(localFilters, neoObjects || []),
+    [localFilters, neoObjects],
   );
 
   const {
     initialRangeFilter: initialMagnitudeFilter,
     maxValue: maxMagnitude,
     minValue: minMagnitude,
-  } = useRangeMinMaxValues(neoObjects || [], 'absolute_magnitude_h');
+  } = useRangeMinMaxValues(neoObjects || [], 'absoluteMagnitudeH');
 
   const {
-    filterState: { name, absoluteMagnitude, isPotentiallyHazardous },
+    maxValue: maxMinEstimatedDiameter,
+    minValue: minMinEstimatedDiameter,
+    initialRangeFilter: initialMinEstimatedRange,
+  } = useRangeMinMaxValues(neoObjects || [], 'estimatedDiameterMinMeters');
+
+  const {
+    maxValue: maxMaxEstimatedDiameter,
+    minValue: minMaxEstimatedDiameter,
+    initialRangeFilter: initialMaxEstimatedRange,
+  } = useRangeMinMaxValues(neoObjects || [], 'estimatedDiameterMaxMeters');
+
+  const {
+    filterState: {
+      name,
+      absoluteMagnitude,
+      isPotentiallyHazardous,
+      estimatedDiameterMaxMeters,
+      estimatedDiameterMinMeters,
+    },
     setAbsoluteMagnitude,
     setIsPotentiallyHazardous,
     setName,
+    setMaxEstimatedDiameter,
+    setMinEstimatedDiameter,
   } = useFilterState({
     name: getFilterValue('name', filters) || '',
     isPotentiallyHazardous: getFilterValue(
-      'is_potentially_hazardous_asteroid',
+      'isPotentiallyHazardousAsteroid',
       filters,
     ),
     absoluteMagnitude:
-      getFilterValue('absolute_magnitude_h', filters) || initialMagnitudeFilter,
+      getFilterValue('absoluteMagnitudeH', filters) || initialMagnitudeFilter,
+    estimatedDiameterMinMeters:
+      getFilterValue('estimatedDiameterMinMeters', filters) ||
+      initialMinEstimatedRange,
+    estimatedDiameterMaxMeters:
+      getFilterValue('estimatedDiameterMaxMeters', filters) ||
+      initialMaxEstimatedRange,
   });
 
   const onApplyFilters = () => {
@@ -67,17 +92,27 @@ export const Filters = ({ navigation }: FiltersScreenProps) => {
     setName('');
     setIsPotentiallyHazardous(undefined);
     setAbsoluteMagnitude([minMagnitude, maxMagnitude]);
+    setMinEstimatedDiameter([minMinEstimatedDiameter, maxMinEstimatedDiameter]);
+    setMaxEstimatedDiameter([minMaxEstimatedDiameter, maxMaxEstimatedDiameter]);
   }, []);
 
   useEffect(() => {
     setLocalFilters(
       createNEOFilterSettings({
-        is_potentially_hazardous_asteroid: isPotentiallyHazardous,
+        isPotentiallyHazardousAsteroid: isPotentiallyHazardous,
         name,
-        absolute_magnitude_h: absoluteMagnitude,
+        absoluteMagnitudeH: absoluteMagnitude,
+        estimatedDiameterMinMeters: estimatedDiameterMinMeters,
+        estimatedDiameterMaxMeters: estimatedDiameterMaxMeters,
       }),
     );
-  }, [name, absoluteMagnitude, isPotentiallyHazardous]);
+  }, [
+    name,
+    absoluteMagnitude,
+    isPotentiallyHazardous,
+    estimatedDiameterMaxMeters,
+    estimatedDiameterMinMeters,
+  ]);
 
   const areFiltersTheSame = useMemo(
     () => areSelectedFiltersTheSame(filters, filteredLocalFilters),
@@ -91,7 +126,7 @@ export const Filters = ({ navigation }: FiltersScreenProps) => {
       style={[
         styles.screenContainer,
         {
-          paddingBottom: insets.bottom,
+          paddingBottom: insets.bottom + verticalScale(20),
         },
       ]}
     >
@@ -115,7 +150,8 @@ export const Filters = ({ navigation }: FiltersScreenProps) => {
             value={isPotentiallyHazardous}
           />
 
-          <MagnitudeFilter
+          <RangeFilter
+            title="Absolute Magnitude"
             max={absoluteMagnitude[1]}
             maxRange={maxMagnitude}
             min={absoluteMagnitude[0]}
@@ -123,6 +159,28 @@ export const Filters = ({ navigation }: FiltersScreenProps) => {
             setValues={(range) => {
               const { min, max } = range;
               setAbsoluteMagnitude([min, max]);
+            }}
+          />
+          <RangeFilter
+            title="Minimal estimated diemeter"
+            max={estimatedDiameterMinMeters[1]}
+            maxRange={maxMinEstimatedDiameter}
+            min={estimatedDiameterMinMeters[0]}
+            minRange={minMinEstimatedDiameter}
+            setValues={(range) => {
+              const { min, max } = range;
+              setMinEstimatedDiameter([min, max]);
+            }}
+          />
+          <RangeFilter
+            title="Maximum estimated diemeter"
+            max={estimatedDiameterMaxMeters[1]}
+            maxRange={maxMaxEstimatedDiameter}
+            min={estimatedDiameterMaxMeters[0]}
+            minRange={minMaxEstimatedDiameter}
+            setValues={(range) => {
+              const { min, max } = range;
+              setMaxEstimatedDiameter([min, max]);
             }}
           />
         </View>
@@ -163,7 +221,7 @@ const styles = StyleSheet.create({
     paddingVertical: verticalScale(14),
     alignSelf: 'center',
     paddingHorizontal: horizontalScale(20),
-    backgroundColor: 'orange',
+    backgroundColor: colors.black,
     width: horizontalScale(200),
     borderRadius: verticalScale(40),
     ...getElevation({
@@ -173,7 +231,7 @@ const styles = StyleSheet.create({
   filtersApplyText: {
     textAlign: 'center',
     color: 'white',
-    fontWeight: '600',
-    fontSize: normalize(20),
+    fontSize: normalize(16),
+    fontWeight: '500',
   },
 });

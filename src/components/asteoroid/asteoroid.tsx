@@ -13,22 +13,18 @@ import Animated from 'react-native-reanimated';
 import { useAsteoroidEnterAnimation } from './use-asteoroid-enter-animation';
 import { useFlameAnimations } from './use-flame-animations';
 
-// Constants for asteroid properties
 const ASTEROID_RADIUS = moderateScale(50);
 const FLAME_WIDTH_RATIO = 2 / 3;
 const FLAME_ROUNDNESS = moderateScale(15);
 
-// Constants for flame positions
 const FLAME_X_POSITION = 50 + ASTEROID_RADIUS;
 const FLAME_Y_POSITION = moderateScale(100);
 const FLAME_OFFSET = (ASTEROID_RADIUS * FLAME_WIDTH_RATIO) / 2;
 
-// Constants for rotation
 const ROTATION_DEGREE = -30;
 const ASTEROID_ROTATION_MULTIPLIER = 12;
 const DEGREE_TO_RADIAN = Math.PI / 180;
 
-// Constants for asteroid details
 const DETAIL_RADIUS_1 = moderateScale(10);
 const DETAIL_RADIUS_2 = moderateScale(15);
 const DETAIL_POSITION_1 = { x: moderateScale(120), y: moderateScale(80) };

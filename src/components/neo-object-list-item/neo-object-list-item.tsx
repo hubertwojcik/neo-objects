@@ -1,17 +1,25 @@
 import type { NearEarthObject } from '@/shared/types';
-import { colors, verticalScale } from '@/shared/utils';
+import {
+  colors,
+  getElevation,
+  horizontalScale,
+  normalize,
+  verticalScale,
+} from '@/shared/utils';
 import { AntDesign } from '@expo/vector-icons';
+
 import { Skeleton } from 'moti/skeleton';
 import React from 'react';
 import {
   ActivityIndicator,
-  Button,
+  Pressable,
+  StyleSheet,
   Text,
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import Animated from 'react-native-reanimated';
-import { styles } from './styles';
+import Animated, { FadeIn, Layout } from 'react-native-reanimated';
+
 import { useOpenDetailAnimation } from './use-open-detail-animation';
 
 type NeoObjectListItemProps = {
@@ -48,13 +56,20 @@ export const NeoObjectListItem = ({
                 width={'80%'}
                 {...SkeletonCommonProps}
               >
-                {item && <Text style={styles.listItemTitle}>{item.name}</Text>}
+                {item && (
+                  <Animated.View
+                    layout={Layout}
+                    entering={FadeIn.duration(1500)}
+                  >
+                    <Text style={styles.listItemTitle}>{item.name}</Text>
+                  </Animated.View>
+                )}
               </Skeleton>
             </View>
 
             {item ? (
               <Animated.View style={animatedIconStyles}>
-                <AntDesign name="down" size={24} color={colors.dark} />
+                <AntDesign name="down" size={24} color={colors.black} />
               </Animated.View>
             ) : (
               <ActivityIndicator />
@@ -70,40 +85,99 @@ export const NeoObjectListItem = ({
             bodyHeight.value = event.nativeEvent.layout.height;
           }}
         >
-          <View style={styles.expandedContent}>
-            {item?.is_potentially_hazardous_asteroid && (
-              <View style={styles.hazardousIconWrapper}>
-                <AntDesign name="warning" size={32} color="black" />
-              </View>
-            )}
-            <View style={styles.expandedItemWrapper}>
-              <View style={styles.expandedDetailContainer}>
-                <Text>Estimated diameter </Text>
-                <Text>
-                  {item?.estimated_diameter?.meters.estimated_diameter_min.toFixed(
-                    2,
-                  )}
-                  -
-                  {item?.estimated_diameter?.meters.estimated_diameter_max.toFixed(
-                    2,
-                  )}{' '}
-                  m
-                </Text>
-              </View>
-              <View style={styles.expandedDetailContainer}>
-                <Text>Miss distance </Text>
-                <Text>
-                  {Number(
-                    item?.close_approach_data[0].miss_distance.kilometers,
-                  ).toFixed(2)}{' '}
-                  km
-                </Text>
-              </View>
+          <View style={styles.expandedItemWrapper}>
+            <View style={styles.expandedDetailContainer}>
+              <Text style={styles.expandedItemTitle}>
+                Is potientially hazardous
+              </Text>
+              <Text>{item?.isPotentiallyHazardousAsteroid ? 'Yes' : 'No'}</Text>
+            </View>
+            <View style={styles.expandedDetailContainer}>
+              <Text style={styles.expandedItemTitle}>Absolute magnitude</Text>
+              <Text>{item?.absoluteMagnitudeH}</Text>
+            </View>
+            <View style={styles.expandedDetailContainer}>
+              <Text style={styles.expandedItemTitle}>
+                Minimum Estimated diameter{' '}
+              </Text>
+              <Text>{item?.estimatedDiameterMinMeters} m</Text>
+            </View>
+
+            <View style={styles.expandedDetailContainer}>
+              <Text style={styles.expandedItemTitle}>
+                Maximum Estimated diameter{' '}
+              </Text>
+              <Text>{item?.estimatedDiameterMaxMeters} m</Text>
             </View>
           </View>
-          <Button title="Go to details" onPress={onDetailsPress} />
+
+          <Pressable style={styles.detailsButton} onPress={onDetailsPress}>
+            <Text style={styles.buttonText}>Go to details</Text>
+            <AntDesign name="arrowright" size={16} color={colors.white} />
+          </Pressable>
         </View>
       </Animated.View>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  listItemContainer: {
+    backgroundColor: colors.white,
+    borderRadius: horizontalScale(10),
+    ...getElevation({ elevation: 5 }),
+  },
+  listItemContent: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flex: 1,
+    paddingHorizontal: horizontalScale(10),
+    paddingVertical: verticalScale(4),
+  },
+  listItemSkeletonWrapper: { paddingVertical: verticalScale(10) },
+  listItemTitle: {
+    color: '#1A1A1A',
+    fontWeight: '600',
+    fontSize: 16,
+  },
+
+  expandedWrapper: {
+    overflow: 'hidden',
+    ...getElevation({ elevation: 10 }),
+  },
+  expandedContainer: {
+    position: 'absolute',
+    width: '100%',
+    paddingHorizontal: horizontalScale(10),
+  },
+
+  expandedItemWrapper: { flex: 1 },
+  expandedItemTitle: {
+    color: colors.black,
+    fontSize: normalize(14),
+    fontWeight: '300',
+  },
+
+  expandedDetailContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+
+  detailsButton: {
+    alignSelf: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    columnGap: horizontalScale(6),
+    backgroundColor: '#2c2c2c',
+    paddingVertical: verticalScale(8),
+    paddingHorizontal: horizontalScale(16),
+    borderRadius: verticalScale(16),
+    marginVertical: verticalScale(16),
+  },
+  buttonText: {
+    color: '#fff',
+    fontWeight: '500',
+  },
+});

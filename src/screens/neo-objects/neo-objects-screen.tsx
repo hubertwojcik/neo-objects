@@ -2,15 +2,18 @@ import { useGetNeoObjects } from '@/api/neo-objects/use-get-neo-objects';
 import { Asteroid, DateChanger, NeoObjectListItem } from '@/components';
 import { useChangeDate, useFilterNeoObjects } from '@/core/hooks';
 import { useNeoObjectsStore } from '@/core/store';
-import { colors, verticalScale } from '@/shared/utils';
+import {
+  colors,
+  horizontalScale,
+  normalize,
+  verticalScale,
+} from '@/shared/utils';
 import { Ionicons } from '@expo/vector-icons';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useMemo } from 'react';
-import { FlatList, Pressable, Text, View } from 'react-native';
+import { FlatList, Pressable, Text, View, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import type { NeoObjectsStackParamList } from '../../navigation/neo-objects-navigator';
-
-import { styles } from './styles';
 
 type NeoObjectsScreenProps = NativeStackScreenProps<
   NeoObjectsStackParamList,
@@ -44,7 +47,7 @@ export const NeoObjects = ({ navigation }: NeoObjectsScreenProps) => {
               paddingVertical: verticalScale(10),
             }}
           >
-            <Ionicons name="options" size={24} color={colors.dark} />
+            <Ionicons name="options" size={24} color={colors.black} />
           </Pressable>
           <DateChanger
             date={date}
@@ -59,7 +62,7 @@ export const NeoObjects = ({ navigation }: NeoObjectsScreenProps) => {
           ListEmptyComponent={
             !isError ? (
               <View>
-                <Text>qweqweqw</Text>
+                <Text>There are no NEO Objects to show</Text>
               </View>
             ) : (
               <View>
@@ -79,6 +82,7 @@ export const NeoObjects = ({ navigation }: NeoObjectsScreenProps) => {
                   item &&
                   navigation.navigate('NeoObjectDetails', {
                     id: item.id,
+                    objectName: item.name,
                   })
                 }
               />
@@ -89,3 +93,26 @@ export const NeoObjects = ({ navigation }: NeoObjectsScreenProps) => {
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.background,
+  },
+  screenTitle: {
+    fontSize: normalize(26),
+    textAlign: 'center',
+    color: colors.black,
+    fontFamily: 'Poppins-SemiBold',
+    textTransform: 'uppercase',
+  },
+  neoListContainer: { flex: 3, paddingHorizontal: horizontalScale(10) },
+  neoListStyle: {
+    paddingHorizontal: horizontalScale(10),
+  },
+  neoListSeparator: {
+    height: 1,
+    width: '100%',
+    marginVertical: verticalScale(5),
+  },
+});

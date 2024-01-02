@@ -1,7 +1,12 @@
 import { TextInput, StyleSheet } from 'react-native';
 import { FilterItem } from '../filter-item';
 import * as React from 'react';
-import { getElevation, horizontalScale, verticalScale } from '@/shared/utils';
+import {
+  colors,
+  getElevation,
+  horizontalScale,
+  verticalScale,
+} from '@/shared/utils';
 
 type NameFilterProps = {
   setValue: (val: string) => void;
@@ -27,7 +32,7 @@ export const NameFilter = ({ setValue, value }: NameFilterProps) => {
 
 const styles = StyleSheet.create({
   textInput: {
-    backgroundColor: 'white',
+    backgroundColor: colors.white,
     borderRadius: verticalScale(40),
     minHeight: verticalScale(40),
     paddingVertical: verticalScale(12),
