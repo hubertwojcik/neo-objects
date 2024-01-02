@@ -26,13 +26,7 @@ const METEORITE_WIDTH = 300;
 
 const ROTATION_ANGLE_MAX = 10;
 const PERSPECTIVE = 300;
-const CANVAS_HEIGHT = 300;
-const CIRCLE_RADIUS_LARGE = 30;
-const CIRCLE_RADIUS_MEDIUM = 20;
-const CIRCLE_RADIUS_SMALL = 15;
-const CORNER_EFFECT_RADIUS = 60;
-const PATH_EFFECT_LENGTH = 40;
-const PATH_EFFECT_DEVIATION = 40;
+
 const ANIMATION_OPACITY_START = 0;
 const ANIMATION_OPACITY_END = 175;
 const OPACITY_MAX = 1;
@@ -114,23 +108,20 @@ export const Meteorite = ({ animatedValue }: MeteoriteProps) => {
   return (
     <GestureDetector gesture={gesture}>
       <Animated.View style={meteoriteAnimatedStyles}>
-        <Canvas style={{ width, height: CANVAS_HEIGHT }}>
+        <Canvas style={{ width, height: 300 }}>
           <Group clip={clip}>
             <Rect
-              rect={rect(50, 50, METEORITE_WIDTH, METEORITE_HEIGHT)}
+              rect={rect(50, 50, 300, METEORITE_HEIGHT)}
               color="darkgray"
               origin={meteorite}
             >
-              <CornerPathEffect r={CORNER_EFFECT_RADIUS} />
-              <DiscretePathEffect
-                length={PATH_EFFECT_LENGTH}
-                deviation={PATH_EFFECT_DEVIATION}
-              />
+              <CornerPathEffect r={60} />
+              <DiscretePathEffect length={40} deviation={40} />
             </Rect>
-            <Circle r={CIRCLE_RADIUS_LARGE} c={vec(300, 50)} color="grey" />
-            <Circle r={CIRCLE_RADIUS_MEDIUM} color="grey" />
-            <Circle r={CIRCLE_RADIUS_SMALL} color="grey" />
-            <Circle r={CIRCLE_RADIUS_LARGE} color="grey" />
+            <Circle r={30} c={vec(300, 50)} color="grey" />
+            <Circle r={20} c={vec(100, 100)} color="grey" />
+            <Circle r={15} c={vec(200, 150)} color="grey" />
+            <Circle r={30} c={vec(310, 170)} color="grey" />
           </Group>
         </Canvas>
       </Animated.View>
