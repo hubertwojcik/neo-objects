@@ -7,7 +7,12 @@ import Animated, {
 } from 'react-native-reanimated';
 import { Text } from 'react-native';
 import * as React from 'react';
-import { getElevation, horizontalScale, verticalScale } from '@/shared/utils';
+import {
+  colors,
+  getElevation,
+  horizontalScale,
+  verticalScale,
+} from '@/shared/utils';
 
 type HazardousFilterProps = {
   setValue: (val?: boolean) => void;
@@ -99,7 +104,7 @@ const styles = StyleSheet.create({
   filterContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: 'white',
+    backgroundColor: colors.white,
     borderRadius: FILTER_ITEM_HEIGHT,
     paddingVertical: verticalScale(10),
     position: 'relative',
@@ -111,7 +116,7 @@ const styles = StyleSheet.create({
   activeFilterIndicator: {
     position: 'absolute',
     height: FILTER_ITEM_HEIGHT,
-    backgroundColor: '#FFBB3B',
+    backgroundColor: colors.accent,
     borderRadius: FILTER_ITEM_HEIGHT,
   },
   filterName: {
