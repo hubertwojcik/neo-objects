@@ -23,7 +23,6 @@
     "development": {
       "channel": "development",
       "distribution": "internal",
-      "autoIncrement": true,
 
       "android": {
         "image": "latest"
@@ -45,7 +44,6 @@
     "staging": {
       "channel": "staging",
       "distribution": "internal",
-      "autoIncrement": true,
 
       "android": {
         "buildType": "apk",
