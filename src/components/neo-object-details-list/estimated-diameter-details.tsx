@@ -1,11 +1,17 @@
 import { SkeletonCommonProps } from '@/shared/constants';
 import type { EstimatedDiameter, Nullabe } from '@/shared/types';
+import {
+  colors,
+  horizontalScale,
+  normalize,
+  verticalScale,
+} from '@/shared/utils';
 import { Skeleton } from 'moti/skeleton';
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-const SKELETON_HEIGHT = 15;
-const SKELETON_WIDTH = 50;
+const SKELETON_HEIGHT = verticalScale(15);
+const SKELETON_WIDTH = horizontalScale(50);
 
 export const EstimatedDiameterDetails = ({
   estimatedDiameter,
@@ -92,28 +98,31 @@ const styles = StyleSheet.create({
   estimatedDetailsContainer: {
     borderBottomWidth: 1,
     borderBottomColor: 'lightgrey',
-    paddingVertical: 10,
+    paddingVertical: verticalScale(10),
   },
   estimatedDetailsTitle: {
     textAlign: 'center',
-    fontSize: 16,
+    fontSize: normalize(16),
     fontFamily: 'Poppins-SemiBold',
-    color: 'white',
+    color: colors.white,
   },
-  estimatedDetailsContent: { flexDirection: 'row', marginBottom: 5 },
+  estimatedDetailsContent: {
+    flexDirection: 'row',
+    marginBottom: verticalScale(5),
+  },
   estimatedDetailsColumn: { flex: 1, alignItems: 'center' },
   estimatedDetailsColumnTitle: {
     textAlign: 'center',
-    fontSize: 14,
+    fontSize: normalize(14),
     fontFamily: 'Poppins-Regular',
     borderBottomWidth: 1,
-    color: 'white',
-    marginBottom: 5,
+    color: colors.white,
+    marginBottom: verticalScale(5),
   },
   estimatedDetailsColumnValue: {
     fontFamily: 'Inter-Regular',
     textAlign: 'center',
-    color: 'white',
-    fontSize: 12,
+    color: colors.white,
+    fontSize: normalize(12),
   },
 });
