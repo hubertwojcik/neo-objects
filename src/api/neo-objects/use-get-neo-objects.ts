@@ -1,4 +1,5 @@
 import { useNeoObjectsStore } from '@/core/store';
+import { mapNeoObjects } from '@/shared/utils';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
 
@@ -24,7 +25,9 @@ export const useGetNeoObjects = (date: string) => {
 
   useEffect(() => {
     if (data) {
-      setNeoObjects(data.near_earth_objects[date]);
+      const objects = data.near_earth_objects[date];
+      const mappedObjects = mapNeoObjects(objects || []);
+      setNeoObjects(mappedObjects);
     }
   }, [data, setNeoObjects]);
 

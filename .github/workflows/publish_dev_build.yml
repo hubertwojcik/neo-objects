@@ -5,7 +5,7 @@ on:
       - develop
 jobs:
   publish:
-    runs-on: ubunut-latest
+    runs-on: ubuntu-latest
     permissions:
       contents: read
       pull-requests: write
@@ -23,4 +23,4 @@ jobs:
       - name: Install dependencies
         run: yarn install --immutable
       - name: Build on EAS
-        run: eas build --platform all --profile development
+        run: eas build --platform android --profile development --non-interactive
