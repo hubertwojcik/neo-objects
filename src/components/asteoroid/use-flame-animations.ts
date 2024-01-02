@@ -6,17 +6,27 @@ import {
   withTiming,
 } from 'react-native-reanimated';
 
+const INITIAL_FIRST_FLAME_WIDTH = 200;
+const INITIAL_SECOND_FLAME_WIDTH = 175;
+const INITIAL_THIRD_FLAME_WIDTH = 120;
+const FIRST_FLAME_MAX_WIDTH = 220;
+const FIRST_FLAME_MIN_WIDTH = 170;
+const SECOND_FLAME_MAX_WIDTH = 250;
+const SECOND_FLAME_MIN_WIDTH = 175;
+const THIRD_FLAME_MAX_WIDTH = 150;
+const THIRD_FLAME_MIN_WIDTH = 120;
+const ANIMATION_DURATION = 1000;
+
 export const useFlameAnimations = () => {
-  const firstFlameWidth = useSharedValue(200);
-  const secondFlameWidth = useSharedValue(175);
-  const thirdFlameWidth = useSharedValue(120);
+  const firstFlameWidth = useSharedValue(INITIAL_FIRST_FLAME_WIDTH);
+  const secondFlameWidth = useSharedValue(INITIAL_SECOND_FLAME_WIDTH);
+  const thirdFlameWidth = useSharedValue(INITIAL_THIRD_FLAME_WIDTH);
 
   useEffect(() => {
-    // Animacja dla długości ogonów
     firstFlameWidth.value = withRepeat(
       withSequence(
-        withTiming(220, { duration: 1000 }),
-        withTiming(170, { duration: 1000 }),
+        withTiming(FIRST_FLAME_MAX_WIDTH, { duration: ANIMATION_DURATION }),
+        withTiming(FIRST_FLAME_MIN_WIDTH, { duration: ANIMATION_DURATION }),
       ),
       -1,
       true,
@@ -24,16 +34,17 @@ export const useFlameAnimations = () => {
 
     secondFlameWidth.value = withRepeat(
       withSequence(
-        withTiming(250, { duration: 1000 }),
-        withTiming(175, { duration: 1000 }),
+        withTiming(SECOND_FLAME_MAX_WIDTH, { duration: ANIMATION_DURATION }),
+        withTiming(SECOND_FLAME_MIN_WIDTH, { duration: ANIMATION_DURATION }),
       ),
       -1,
       true,
     );
+
     thirdFlameWidth.value = withRepeat(
       withSequence(
-        withTiming(150, { duration: 1000 }),
-        withTiming(120, { duration: 1000 }),
+        withTiming(THIRD_FLAME_MAX_WIDTH, { duration: ANIMATION_DURATION }),
+        withTiming(THIRD_FLAME_MIN_WIDTH, { duration: ANIMATION_DURATION }),
       ),
       -1,
       true,
