@@ -2,7 +2,12 @@ import { View, StyleSheet, Pressable } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { horizontalScale, normalize, verticalScale } from '@/shared/utils';
+import {
+  colors,
+  horizontalScale,
+  normalize,
+  verticalScale,
+} from '@/shared/utils';
 import type { SharedValue } from 'react-native-reanimated';
 import Animated, {
   interpolateColor,
@@ -17,6 +22,9 @@ type NeoDetailsHeaderProps = {
 
 const AnimatedIcon = Animated.createAnimatedComponent(AntDesign);
 
+const MAX_SCROLL_VALUE = 150;
+const MIN_SCROLL_VALUE = 0;
+
 export const NeoDetailsHeader = ({
   title,
   scrollValue,
@@ -25,8 +33,8 @@ export const NeoDetailsHeader = ({
     return {
       color: interpolateColor(
         scrollValue.value,
-        [0, 150],
-        ['#2c2c2c', 'white'],
+        [MIN_SCROLL_VALUE, MAX_SCROLL_VALUE],
+        [colors.black, colors.white],
       ),
     };
   });
@@ -34,8 +42,8 @@ export const NeoDetailsHeader = ({
   const animatedProps = useAnimatedProps(() => {
     const color = interpolateColor(
       scrollValue.value,
-      [0, 150],
-      ['#2c2c2c', 'white'],
+      [MIN_SCROLL_VALUE, MAX_SCROLL_VALUE],
+      [colors.black, colors.white],
     );
     return { color };
   });
