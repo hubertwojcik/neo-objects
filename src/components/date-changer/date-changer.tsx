@@ -21,7 +21,7 @@ export const DateChanger = ({
         <AntDesign
           name="leftcircleo"
           size={verticalScale(24)}
-          color={colors.dark}
+          color={colors.black}
         />
       </Pressable>
       <Text style={styles.selectedDateText}>
@@ -31,7 +31,7 @@ export const DateChanger = ({
         <AntDesign
           name="rightcircleo"
           size={verticalScale(24)}
-          color={colors.dark}
+          color={colors.black}
         />
       </Pressable>
     </View>
