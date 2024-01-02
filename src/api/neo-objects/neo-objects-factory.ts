@@ -1,4 +1,4 @@
 export const neoObjectsFactory = {
   neoObjects: ['neo-objects'],
-  neoObjectById: (id: number) => [...neoObjectsFactory.neoObjects, id],
+  neoObjectById: (id: string) => [...neoObjectsFactory.neoObjects, id],
 } as const;

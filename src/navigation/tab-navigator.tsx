@@ -87,7 +87,7 @@ export const HomeNavigator = () => {
             right: 16,
             left: 16,
             height: 60,
-            backgroundColor: colors.dark,
+            backgroundColor: colors.black,
             borderRadius: 10,
             ...getElevation({ elevation: 5 }),
           },

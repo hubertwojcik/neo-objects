@@ -5,7 +5,7 @@ on:
       - staging
 jobs:
   publish:
-    runs-on: ubunut-latest
+    runs-on: ubuntu-latest
     permissions:
       contents: read
       pull-requests: write
@@ -23,4 +23,4 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Build on EAS
-        run: eas build --platform all --profile develop
+        run: eas build --platform android --profile staging

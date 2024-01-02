@@ -2,7 +2,7 @@ name: Publish Test Build
 on:
   push:
     branches:
-      - develop
+      - production
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -12,17 +12,12 @@ jobs:
         with:
           node-version: 18.x
           cache: npm
-
-      - name: Setup Expo
-        uses: expo/expo-github-action@v6
+      - name: Setup Expo and EAS
+        uses: expo/expo-github-action@v8
         with:
-          expo-version: 4.x
-          expo-cache: true
           eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
-
-      - name: Install Dependencies
-        run: yarn
-
-      - name: Publish to Expo Go
-        run: NODE_ENV=test expo publish --non-interactive --release-channel test
+      - name: Install dependencies
+        run: yarn install --immutable
+      - name: Build on EAS
+        run: eas build --platform all --profile production

@@ -8,8 +8,8 @@ import type { PickByType } from './utils';
  * ```
  * const criteriaMap: NEOFilterCriteriaMap = {
  *   name: 'string',
- *   absolute_magnitude_h: [5.0, 10.0],
- *   is_potentially_hazardous_asteroid: true
+ *   absoluteMagnitudeH: [5.0, 10.0],
+ *   isPotentiallyHazardousAsteroid: true
  * };
  * ```
  */
@@ -17,9 +17,13 @@ export type NEOFilterCriteriaMap = {
   /** Filters by the name of the NEO. */
   name: string;
   /** Filters by the absolute magnitude of the NEO. Expects a `NumberRange` type. */
-  absolute_magnitude_h: NumberRange;
+  absoluteMagnitudeH: NumberRange;
   /** Filters based on whether the NEO is potentially hazardous. Optional. */
-  is_potentially_hazardous_asteroid?: boolean;
+  isPotentiallyHazardousAsteroid?: boolean;
+  /** Filters by the estimaated diameter of the NEO. Expects a `NumberRange` type. */
+  estimatedDiameterMinMeters: NumberRange;
+  /** Filters by the estimaated diameter of the NEO. Expects a `NumberRange` type. */
+  estimatedDiameterMaxMeters: NumberRange;
 };
 
 /**
@@ -27,7 +31,7 @@ export type NEOFilterCriteriaMap = {
  *
  * @example
  * ```
- * type NEOKey: NEOFilterKey = 'name' | 'absolute_magnitude_h';
+ * type NEOKey: NEOFilterKey = 'name' | 'absoluteMagnitudeH';
  * ```
  */
 export type NEOFilterKey = keyof Pick<
@@ -43,7 +47,7 @@ export type NEOFilterKey = keyof Pick<
  *
  * @example
  * ```typescript
- * type NumericFilterKey = 'absolute_magnitude_h';
+ * type NumericFilterKey = 'absoluteMagnitudeH';
  * ```
  *
  * @remarks
@@ -141,7 +145,7 @@ export type NEOFilter = TextFilter | RangeFilter | BooleanFilter;
  * // Create filter settings using these filters
  * const filterSettings: NEOFilterSettings = {
  *   name: nameFilter,
- *   is_potentially_hazardous_asteroid: hazardFilter
+ *   isPotentiallyHazardousAsteroid: hazardFilter
  * };
  * ```
  */
@@ -156,7 +160,7 @@ export type NEOFilterSettings = Partial<Record<NEOFilterKey, NEOFilter>>;
  * const magnitudeRangeFilter: RangeFilter = { value: [5.0, 10.0] };
  *
  * // Create a filter pair for the absolute magnitude
- * const filterPair: NEOFilterPair = ['absolute_magnitude_h', magnitudeRangeFilter];
+ * const filterPair: NEOFilterPair = ['absoluteMagnitudeH', magnitudeRangeFilter];
  * ```
  */
 export type NEOFilterPair = [NEOFilterKey, NEOFilter];
