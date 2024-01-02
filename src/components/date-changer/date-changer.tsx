@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
   },
   selectedDateText: {
     fontSize: normalize(20),
-    color: colors.dark,
+    color: colors.black,
     marginBottom: verticalScale(12),
     fontFamily: 'Poppins-SemiBold',
   },
