@@ -121,6 +121,6 @@ const styles = StyleSheet.create({
   },
   filterName: {
     textAlign: 'center',
-    fontWeight: '600',
+    fontFamily: 'Poppins-SemiBold',
   },
 });
