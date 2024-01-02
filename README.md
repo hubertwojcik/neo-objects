@@ -15,6 +15,13 @@ This application is a deep dive into the world of space and interactive mobile a
 - Implementing complex data integration using the NASA API.
 - Enhancing the user experience with advanced animations and state management in React Native.
 
+<img src="https://github.com/hubertwojcik/neo-objects/assets/55180668/9e1bdde8-0192-43ca-918f-073a025c79d0" width="200" height="450" />
+<img src="https://github.com/hubertwojcik/neo-objects/assets/55180668/c57b0dd6-4c44-4f86-9ca7-e37ee9c72b0c" width="200" height="450" />
+<img src="https://github.com/hubertwojcik/neo-objects/assets/55180668/30c49366-d360-49e5-9c5c-1e46f162ddfc" width="200" height="450" />
+<img src="https://github.com/hubertwojcik/neo-objects/assets/55180668/e456a23c-7806-4404-a59c-e3ba722269fd" width="200" height="450" />
+<img src="https://github.com/hubertwojcik/neo-objects/assets/55180668/a9c47e98-0acb-48de-8ec6-be400da66988" width="200" height="450" />
+
+
 ### Built With
 
 - [React Native](https://reactnative.dev/)
@@ -30,7 +37,7 @@ This application is a deep dive into the world of space and interactive mobile a
 This application enables users to:
 
 - Browse through a list of near-Earth objects using the NASA API.
-- Filter objects based on characteristics like size, velocity, and proximity to Earth.
+- Filter objects based on characteristics like size, whether they are hazardous to Earth, and their absolute magnitude.
 - View detailed information about each object, including estimated diameter, relative velocity, and more.
 - Experience smooth and responsive animations and transitions.
 
