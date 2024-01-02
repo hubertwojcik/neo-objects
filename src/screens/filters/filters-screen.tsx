@@ -8,6 +8,7 @@ import { useRangeMinMaxValues } from '@/core/hooks';
 import { useNeoObjectsStore } from '@/core/store';
 import {
   areSelectedFiltersTheSame,
+  colors,
   createNEOFilterSettings,
   extractActiveNEOFilters,
   getElevation,
@@ -220,7 +221,7 @@ const styles = StyleSheet.create({
     paddingVertical: verticalScale(14),
     alignSelf: 'center',
     paddingHorizontal: horizontalScale(20),
-    backgroundColor: '#2c2c2c',
+    backgroundColor: colors.black,
     width: horizontalScale(200),
     borderRadius: verticalScale(40),
     ...getElevation({
